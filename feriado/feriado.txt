@@ -1,0 +1,103 @@
+NOME|TIPO|ABRANGÊNCIA|ESTADO|MUNICÍPIO_IBGE|MUNICÍPIO_NOME|QUANDO|DIA|DIA_DA_SEMANA|MES|ANO|DIAS_DE_DIFERENCA|AJUSTE
+Assinatura do Tratado de Petrópolis|F|E|AC|||M|17||11||0|AC
+Dia da Amazônia|F|E|AC|||M|5||9||0|AC
+Início da Revolução Acreana|F|E|AC|||M|6||8||0|AC
+Aniversário do Acre|F|E|AC|||M|15||6||0|
+Dia do Evangélico - AC|F|E|AC|||M|23||1||0|AC
+Dia de São Pedro|F|E|AL|||M|29||6||0|
+Dia de São João|F|E|AL|||M|24||6||0|
+Aniversário de Alagoas|F|E|AL|||M|16||9||0|
+Dia de Nossa Senhora da Conceição - AM|F|E|AM|||M|8||12||0|
+Aniversário do Amazonas|F|E|AM|||M|5||9||0|
+Aniversário do Amapá|F|E|AP|||M|13||9||0|
+Dia de São José|F|E|AP|||M|19||3||0|
+Independência da Bahia|F|E|BA|||M|2||7||0|
+Aniversário do Ceará|F|E|CE|||M|25||3||0|
+Dia do evangélico - DF|F|E|DF|||M|30||11||0|
+Aniversário de Brasília|F|E|DF|||M|21||4||0|
+Dia de Nossa Senhora da Conceição - MA|F|E|MA|||M|8||12||0|
+Adesão do Maranhão à Independência|F|E|MA|||M|28||7||0|
+Aniversário de Minas Gerais|F|E|MG|||M|21||4||0|
+Criação do estado de Mato Grosso do Sul|F|E|MS|||M|11||10||0|
+Dia de Nossa Senhora da Conceição - PA|F|E|PA|||M|8||12||0|
+Adesão do Grão-Pará à Independência do Brasil|F|E|PA|||M|15||8||0|
+Homenagem à memória do ex-presidente João Pessoa|F|E|PB|||M|26||7||0|
+Aniversário da Paraíba|F|E|PB|||M|5||8||0|
+Revolução Pernambucana de 1817|F|E|PE|||S|1|6|3||0|
+Aniversário do Piauí|F|E|PI|||M|19||10||0|
+Aniversário do Paraná|F|E|PR|||M|19||12||0|
+Dia de São Jorge|F|E|RJ|||M|23||4||0|
+Dia de São Pedro - RN|F|E|RN|||M|29||6||0|
+Mártires de Cunhaú e Uruaçu|F|E|RN|||M|3||10||0|
+Dia do Evangélico - RO|F|E|RO|||M|18||6||0|
+Aniversário de Rondônia|F|E|RO|||M|4||1||0|
+Aniversário de Roraima|F|E|RR|||M|5||10||0|
+Revolução Farroupilha|F|E|RS|||M|20||9||0|
+Dia de Santa Catarina de Alexandria|F|E|SC|||M|25||11||0|SC
+Aniversário de Santa Catarina|F|E|SC|||M|11||8||0|SC
+Aniversário de Sergipe|F|E|SE|||M|8||7||0|
+Revolução Constitucionalista de 1932|F|E|SP|||M|9||7||0|
+Dia de Nossa Senhora da Natividade|F|E|TO|||M|8||9||0|
+Autonomia do estado de Tocantins|F|E|TO|||M|18||3||0|
+Criação do estado de Tocantins|F|E|TO|||M|5||10||0|
+Aniversário de Rio Branco|F|M|AC|1200401|Rio Branco|M|28||12||0|
+Aniversário de Maceió|F|M|AL|2704302|Maceió|M|5||12||0|
+Aniversário de Manaus|F|M|AM|1302603|Manaus|M|24||10||0|
+Aniversário de Macapá|F|M|AP|1600303|Macapá|M|4||2||0|
+Aniversário de Salvador|F|M|BA|2927408|Salvador|M|29||3||0|
+Aniversário de Fortaleza|F|M|CE|2304400|Fortaleza|M|13||4||0|
+Aniversário de Vitória|F|M|ES|3205309|Vitória|M|8||9||0|
+Aniversário de Goiânia|F|M|GO|5208707|Goiânia|M|24||10||0|
+Aniversário de Belo Horizonte|F|M|MG|3106200|Belo Horizonte|M|12||12||0|
+Aniversário de Campo Grande|F|M|MS|5002704|Campo Grande|M|26||8||0|
+Aniversário de Cuiabá|F|M|MT|5103403|Cuiabá|M|8||4||0|
+Aniversário de Belém|F|M|PA|1501402|Belém|M|12||1||0|
+Aniversário de João Pessoa|F|M|PB|2507507|João Pessoa|M|5||8||0|
+Aniversário de Recife|F|M|PE|2611606|Recife|M|12||3||0|
+Aniversário de Teresina|F|M|PI|2211001|Teresina|M|16||8||0|
+Aniversário de Curitiba|F|M|PR|4106902|Curitiba|M|29||3||0|
+Aniversário da Cidade do Rio de Janeiro|F|M|RJ|3304557|Rio de Janeiro|M|1||3||0|
+Aniversário da Cidade de Natal|F|M|RN|2408102|Natal|M|25||12||0|
+Aniversário de Porto Velho|F|M|RO|1100205|Porto Velho|M|2||10||0|
+Aniversário de Boa Vista|F|M|RR|1400100|Boa Vista|M|9||6||0|
+Aniversário de Porto Alegre|F|M|RS|4314902|Porto Alegre|M|26||3||0|
+Aniversário da Cidade de Chapecó|F|M|SC|4204202|Chapecó|M|25||8||0|
+Aniversário de Florianópolis|F|M|SC|4205407|Florianópolis|M|23||3||0|
+Aniversário da Cidade de Joinville|F|M|SC|4209102|Joinville|M|9||3||0|
+Aniversário de Aracaju|F|M|SE|2800308|Aracaju|M|17||3||0|
+Aniversário da Cidade de São Paulo|F|M|SP|3550308|São Paulo|M|25||1||0|
+Aniversário da Cidade de Sorocaba|F|M|SP|3552205|Sorocaba|M|15||8||0|
+Aniversário de Palmas|F|M|TO|1721000|Palmas|M|20||5||0|
+Véspera de Ano Novo|B|N||||M|31||12||0|
+Véspera de Natal|B|N||||M|24||12||0|
+Quarta-feira de Cinzas|B|N||||P|||||-46|
+Carnaval (segunda-feira)|B|N||||P|||||-48|
+Dia da Consciência Negra|C|N||||M|20||11||0|
+Natal|F|N||||M|25||12||0|
+Proclamação da República|F|N||||M|15||11||0|
+Finados|F|N||||M|2||11||0|
+Nossa Senhora Aparecida|F|N||||M|12||10||0|
+Independência do Brasil|F|N||||M|7||9||0|
+Dia do Trabalho|F|N||||M|1||5||0|
+Tiradentes|F|N||||M|21||4||0|
+Paixão de Cristo|F|N||||P|||||-2|
+Corpus Christi|F|N||||P|||||60|
+Carnaval (terça-feira)|F|N||||P|||||-47|
+Confraternização Universal|F|N||||M|1||1||0|
+Páscoa|F|N||||P|||||0|
+Aniversário de Santa Rosa|F|M|RS|4317202|Santa Rosa|M|10||8||0|
+Reforma Protestante|F|M|RS|4317202|Santa Rosa|M|31||10||0|
+Reforma Protestante|F|M|RS|4300109|Agudo|M|31||10||0|
+Reforma Protestante|F|M|RS|4301008|Arroio do Meio|M|31||10||0|
+Reforma Protestante|F|M|RS|4304200|Candelária|M|31||10||0|
+Reforma Protestante|F|M|RS|4304507|Canguçu|M|31||10||0|
+Reforma Protestante|F|M|RS|4306007|Crissiumal|M|31||10||0|
+Reforma Protestante|F|M|RS|4307807|Estrela|M|31||10||0|
+Reforma Protestante|F|M|RS|4310504|Iraí|M|31||10||0|
+Reforma Protestante|F|M|RS|4311403|Lajeado|M|31||10||0|
+Reforma Protestante|F|M|RS|4312658|Não-Me-Toque|M|31||10||0|
+Reforma Protestante|F|M|RS|4313201|Nova Petrópolis|M|31||10||0|
+Reforma Protestante|F|M|RS|4315107|Porto Xavier|M|31||10||0|
+Reforma Protestante|F|M|RS|4321451|Teutônia|M|31||10||0|
+Reforma Protestante|F|M|RS|4321808|Três de Maio|M|31||10||0|
+Aniversário de Marabá|F|M|PA|1504208|Marabá|M|3||4||0|
