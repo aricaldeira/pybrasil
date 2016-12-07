@@ -29,14 +29,13 @@ class Feriado(Local):
         self.ano = kwargs.get('ano', None)
         self.dias_de_diferenca = kwargs.get('dias_de_diferenca', 0)
         self.ajuste = kwargs.get('ajuste', None)
-        self._data_feriado = False
-        self._data_referencia = False
+        self.data_referencia = hoje()
 
     def __str__(self):
         return unicode.encode(self.__unicode__(), 'utf-8')
 
     def __unicode__(self):
-        txt = self.nome + ' - ' + self.data().strftime('%a, %d-%b-%Y').decode('utf-8')
+        txt = self.nome + ' - ' + self.data_feriado.strftime('%a, %d-%b-%Y').decode('utf-8')
 
         if self.abrangencia == 'E':
             txt += ', somente em ' + unicode(self.estado)
@@ -48,16 +47,13 @@ class Feriado(Local):
     def __repr__(self):
         return str(self)
 
-    def data(self, data_referencia=hoje()):
-        if self._data_feriado and self._data_referencia == data_referencia:
-            return data_hora_horario_brasilia(self._data_feriado).date()
-        elif not self._data_referencia:
-            self._data_referencia = data_referencia
+    def data(self, data_referencia=None):
+        if data_referencia is not None:
+            self.data_referencia = parse_datetime(data_referencia)
 
-        data_referencia = parse_datetime(data_referencia)
-        ano = data_referencia.year
-        mes = data_referencia.month
-        dia = data_referencia.day
+        ano = self.data_referencia.year
+        mes = self.data_referencia.month
+        dia = self.data_referencia.day
         data_feriado = data_referencia
 
         if self.quando == 'A':
@@ -111,6 +107,10 @@ class Feriado(Local):
 
         self._data_feriado = data_hora_horario_brasilia(data_feriado).date()
         return self._data_feriado
+
+    @property
+    def data_feriado(self):
+        return self.data()
 
 
 def _monta_lista_feriados():
