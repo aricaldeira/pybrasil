@@ -29,6 +29,8 @@ class Feriado(Local):
         self.ano = kwargs.get('ano', None)
         self.dias_de_diferenca = kwargs.get('dias_de_diferenca', 0)
         self.ajuste = kwargs.get('ajuste', None)
+        self._data_feriado = False
+        self._data_referencia = False
 
     def __str__(self):
         return unicode.encode(self.__unicode__(), 'utf-8')
@@ -47,6 +49,11 @@ class Feriado(Local):
         return str(self)
 
     def data(self, data_referencia=hoje()):
+        if self._data_feriado and self._data_referencia == data_referencia:
+            return data_hora_horario_brasilia(self._data_feriado).date()
+        elif not self._data_referencia:
+            self._data_referencia = data_referencia
+
         data_referencia = parse_datetime(data_referencia)
         ano = data_referencia.year
         mes = data_referencia.month
@@ -102,7 +109,8 @@ class Feriado(Local):
                     dias_a_avancar = 6 - data_feriado.weekday()
                     data_feriado += relativedelta(days=dias_a_avancar)
 
-        return data_hora_horario_brasilia(data_feriado).date()
+        self._data_feriado = data_hora_horario_brasilia(data_feriado).date()
+        return self._data_feriado
 
 
 def _monta_lista_feriados():
