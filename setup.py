@@ -10,5 +10,8 @@ setup(
     license='',
     author='Aristides Caldeira',
     author_email='aristides.caldeira@tauga.com.br',
-    description=''
+    description='',
+    package_data = {
+        '': ['*.txt'],
+    },
 )
