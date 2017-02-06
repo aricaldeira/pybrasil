@@ -107,7 +107,6 @@ Submódulo produto:
 
     - valida_ean: validação dos códigos de barras dos produtos
 
-
 Submódulo valor:
 ----------------
 
@@ -140,3 +139,7 @@ Submódulo ncm:
       - NCM_CODIGO_EX
       - NBS_CODIGO
       - SERVICOS_CODIGO
+
+Submódulo python_pt_BR:
+
+    - Função python_pt_BR
