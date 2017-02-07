@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='pybrasil',
     version='0.0.0.1',
-    packages=['',
+    packages=[
         'pybrasil',
         'pybrasil.ncm',
         'pybrasil.base',
