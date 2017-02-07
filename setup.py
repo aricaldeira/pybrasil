@@ -14,7 +14,7 @@ setup(
         'pybrasil.produto',
         'pybrasil.telefone',
         'pybrasil.inscricao',
-        'pybrasil.python_pt_BR',
+        'pybrasil.python_pt_BR'
     ],
     url='git@github.com:aricaldeira/pybrasil.git',
     license='',
@@ -24,7 +24,7 @@ setup(
     install_requires=[
         'dateutil(>=2.6.0)',
         'pytz(>=2016.10)',
-        'pyparsing(>=2.1.10)',
+        'pyparsing(>=2.1.10)'
     ],
     package_data = {
         '': ['*.txt'],
