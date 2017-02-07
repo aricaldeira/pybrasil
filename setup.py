@@ -22,7 +22,7 @@ setup(
     author_email='aristides.caldeira@tauga.com.br',
     description='',
     install_requires=[
-        'dateutil(>=2.6.0)',
+        'python-dateutil(>=2.6.0)',
         'pytz(>=2016.10)',
         'pyparsing(>=2.1.10)'
     ],
