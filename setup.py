@@ -21,11 +21,6 @@ setup(
     author='Aristides Caldeira',
     author_email='aristides.caldeira@tauga.com.br',
     description='',
-    install_requires=[
-        'python-dateutil(>=2.6.0)',
-        'pytz(>=2016.10)',
-        'pyparsing(>=2.1.10)'
-    ],
     package_data = {
         '': ['*.txt'],
     },
