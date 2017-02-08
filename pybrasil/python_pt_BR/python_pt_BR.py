@@ -277,7 +277,8 @@ python_brasil = unicodeTripleQuote | tripleQuote | unicodeString | \
 
 
 def python_pt_BR(texto, dicionario={}):
-    PALAVRAS_BRASIL = dicionario
+    global PALAVRAS_BRASIL
+    PALAVRAS_BRASIL.update(dicionario)
 
     if type(texto) != unicode:
         texto = unicode(texto)
