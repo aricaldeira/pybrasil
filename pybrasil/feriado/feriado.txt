@@ -70,7 +70,7 @@ Aniversário da Cidade de Sorocaba|F|M|SP|3552205|Sorocaba|M|15||8||0|
 Aniversário de Palmas|F|M|TO|1721000|Palmas|M|20||5||0|
 Véspera de Ano Novo|B|N||||M|31||12||0|
 Véspera de Natal|B|N||||M|24||12||0|
-Quarta-feira de Cinzas|B|N||||P|||||-46|
+Quarta-feira de Cinzas|F|N||||P|||||-46|
 Carnaval (segunda-feira)|B|N||||P|||||-48|
 Dia da Consciência Negra|C|N||||M|20||11||0|
 Natal|F|N||||M|25||12||0|
@@ -82,7 +82,7 @@ Dia do Trabalho|F|N||||M|1||5||0|
 Tiradentes|F|N||||M|21||4||0|
 Paixão de Cristo|F|N||||P|||||-2|
 Corpus Christi|F|N||||P|||||60|
-Carnaval (terça-feira)|F|N||||P|||||-47|
+Carnaval (terça-feira)|B|N||||P|||||-47|
 Confraternização Universal|F|N||||M|1||1||0|
 Páscoa|F|N||||P|||||0|
 Aniversário de Santa Rosa|F|M|RS|4317202|Santa Rosa|M|10||8||0|
