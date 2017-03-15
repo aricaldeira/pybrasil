@@ -20,6 +20,11 @@ NUMERO_INTERNACIONAL_BRASIL = re.compile(r'^\+55' + DDDS + r'([2345][0-9]{7}|[56
 NUMERO_ESPECIAL_0800 = re.compile(r'^0[3589]00[0-9]{6,7}$')
 NUMERO_ESPECIAL_4000 = re.compile(r'^[43][0-9]{7,8}$')
 
+FORMATO_CELULAR_3_2_4 = '3_2_4'
+FORMATO_CELULAR_3_3_3 = '3_3_3'
+FORMATO_CELULAR_1_4_4 = '1_4_4'
+FORMATO_CELULAR_5_4 = '5_4'
+
 
 def limpa_fone(fone):
     return LIMPA.sub('', fone)
@@ -56,7 +61,7 @@ def separa_fone(fone):
     return '', fone
 
 
-def formata_fone(fone, valida_nono_digito=False, ddd_padrao=''):
+def formata_fone(fone, valida_nono_digito=False, ddd_padrao='', formato_celular=FORMATO_CELULAR_3_2_4):
     if not valida_fone(fone, valida_nono_digito=valida_nono_digito):
         return fone
 
@@ -96,8 +101,15 @@ def formata_fone(fone, valida_nono_digito=False, ddd_padrao=''):
                 numero = '9' + numero
 
         if len(numero) == 9:
-            formatado = '(%s) %s-%s-%s' % (ddd, numero[-9:-6], numero[-6:-3], numero[-3:])
-            #formatado = '(%s) %s-%s' % (ddd, numero[-9:-4], numero[-4:])
+            if formato_celular == FORMATO_CELULAR_3_2_4:
+                formatado = '(%s) %s-%s-%s' % (ddd, numero[-9:-6], numero[-6:-4], numero[-4:])
+            elif formato_celular == FORMATO_CELULAR_3_3_3:
+                formatado = '(%s) %s-%s-%s' % (ddd, numero[-9:-6], numero[-6:-3], numero[-3:])
+            elif formato_celular == FORMATO_CELULAR_1_4_4:
+                formatado = '(%s) %s-%s-%s' % (ddd, numero[-9], numero[-8:-4], numero[-4:])
+            #elif formato_celular == FORMATO_CELULAR_5_4:
+            else:
+                formatado = '(%s) %s-%s' % (ddd, numero[-9:-4], numero[-4:])
         else:
             formatado = '(%s) %s-%s' % (ddd, numero[0:4], numero[4:])
 
@@ -110,8 +122,15 @@ def formata_fone(fone, valida_nono_digito=False, ddd_padrao=''):
         if len(numero) == 8:
             return '%s-%s' % (numero[0:4], numero[4:])
         elif len(numero) == 9:
-            return '%s-%s-%s' % (numero[-9:-6], numero[-6:-3], numero[-3:])
-            #return '%s-%s' % (numero[-9:-4], numero[-4:])
+            if formato_celular == FORMATO_CELULAR_3_2_4:
+                return '%s-%s-%s' % (numero[-9:-6], numero[-6:-4], numero[-4:])
+            elif formato_celular == FORMATO_CELULAR_3_3_3:
+                return '%s-%s-%s' % (numero[-9:-6], numero[-6:-3], numero[-3:])
+            elif formato_celular == FORMATO_CELULAR_1_4_4:
+                return '%s-%s-%s' % (numero[-9], numero[-8:-4], numero[-4:])
+            #elif formato_celular == FORMATO_CELULAR_5_4:
+            else:
+                return '%s-%s' % (numero[-9:-4], numero[-4:])
         else:
             return numero
 
