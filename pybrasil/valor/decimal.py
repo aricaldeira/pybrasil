@@ -673,6 +673,12 @@ class Decimal(object):
             self._is_special  = value._is_special
             return self
 
+        try:
+            value = str(value)
+            return Decimal(value)
+        except:
+            pass
+
         raise TypeError("Cannot convert %r to Decimal" % value)
 
     # @classmethod, but @decorator is not valid Python 2.3 syntax, so
