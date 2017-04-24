@@ -70,7 +70,7 @@ Aniversário da Cidade de Sorocaba|F|M|SP|3552205|Sorocaba|M|15||8||0|
 Aniversário de Palmas|F|M|TO|1721000|Palmas|M|20||5||0|
 Véspera de Ano Novo|B|N||||M|31||12||0|
 Véspera de Natal|B|N||||M|24||12||0|
-Quarta-feira de Cinzas|F|N||||P|||||-46|
+Quarta-feira de Cinzas|C|N||||P|||||-46|
 Carnaval (segunda-feira)|B|N||||P|||||-48|
 Dia da Consciência Negra|C|N||||M|20||11||0|
 Natal|F|N||||M|25||12||0|
@@ -101,3 +101,5 @@ Reforma Protestante|F|M|RS|4315107|Porto Xavier|M|31||10||0|
 Reforma Protestante|F|M|RS|4321451|Teutônia|M|31||10||0|
 Reforma Protestante|F|M|RS|4321808|Três de Maio|M|31||10||0|
 Aniversário de Marabá|F|M|PA|1504208|Marabá|M|3||4||0|
+Aniversário de Itajubá|F|M|MG|3132404|Itajubá|M|19||3||0|
+Aniversário de Brasília|F|M|DF|3132404|Brasília|M|21||4||0|
