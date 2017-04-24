@@ -4,54 +4,100 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
+MES_JANEIRO = 1
+MES_FEVEREIRO = 2
+MES_MARCO = 3
+MES_ABRIL = 4
+MES_MAIO = 5
+MES_JUNHO = 6
+MES_JULHO = 7
+MES_AGOSTO = 8
+MES_SETEMBRO = 9
+MES_OUTUBRO = 10
+MES_NOVEMBRO = 11
+MES_DEZEMBRO = 12
+
+MESES = [
+    MES_JANEIRO,
+    MES_FEVEREIRO,
+    MES_MARCO,
+    MES_ABRIL,
+    MES_MAIO,
+    MES_JUNHO,
+    MES_JULHO,
+    MES_AGOSTO,
+    MES_SETEMBRO,
+    MES_OUTUBRO,
+    MES_NOVEMBRO,
+    MES_DEZEMBRO,
+]
+
 MES = {
-    1: 'janeiro',
-    2: 'fevereiro',
-    3: 'março',
-    4: 'abril',
-    5: 'maio',
-    6: 'junho',
-    7: 'julho',
-    8: 'agosto',
-    9: 'setembro',
-    10: 'outubro',
-    11: 'novembro',
-    12: 'dezembro',
+    MES_JANEIRO: 'janeiro',
+    MES_FEVEREIRO: 'fevereiro',
+    MES_MARCO: 'março',
+    MES_ABRIL: 'abril',
+    MES_MAIO: 'maio',
+    MES_JUNHO: 'junho',
+    MES_JULHO: 'julho',
+    MES_AGOSTO: 'agosto',
+    MES_SETEMBRO: 'setembro',
+    MES_OUTUBRO: 'outubro',
+    MES_NOVEMBRO: 'novembro',
+    MES_DEZEMBRO: 'dezembro',
 }
 
 MES_ABREVIADO = {
-    1: 'jan',
-    2: 'fev',
-    3: 'mar',
-    4: 'abr',
-    5: 'mai',
-    6: 'jun',
-    7: 'jul',
-    8: 'ago',
-    9: 'set',
-    10: 'out',
-    11: 'nov',
-    12: 'dez',
+    MES_JANEIRO: 'jan',
+    MES_FEVEREIRO: 'fev',
+    MES_MARCO: 'mar',
+    MES_ABRIL: 'abr',
+    MES_MAIO: 'mai',
+    MES_JUNHO: 'jun',
+    MES_JULHO: 'jul',
+    MES_AGOSTO: 'ago',
+    MES_SETEMBRO: 'set',
+    MES_OUTUBRO: 'out',
+    MES_NOVEMBRO: 'nov',
+    MES_DEZEMBRO: 'dez',
 }
 
+DIA_SEGUNDA = 0
+DIA_TERCA = 1
+DIA_QUARTA = 2
+DIA_QUINTA = 3
+DIA_SEXTA = 4
+DIA_SABADO = 5
+DIA_DOMINGO = 6
+
+DIAS_DA_SEMANA = [
+    DIA_SEGUNDA,
+    DIA_TERCA,
+    DIA_QUARTA,
+    DIA_QUINTA,
+    DIA_SEXTA,
+    DIA_SABADO,
+    DIA_DOMINGO,
+]
+
 DIA_DA_SEMANA = {
-    0: 'segunda-feira',
-    1: 'terça-feira',
-    2: 'quarta-feira',
-    3: 'quinta-feira',
-    4: 'sexta-feira',
-    5: 'sábado',
-    6: 'domingo',
+    DIA_SEGUNDA: 'segunda-feira',
+    DIA_TERCA: 'terça-feira',
+    DIA_QUARTA: 'quarta-feira',
+    DIA_QUINTA: 'quinta-feira',
+    DIA_SEXTA: 'sexta-feira',
+    DIA_SABADO: 'sábado',
+    DIA_DOMINGO: 'domingo',
 }
 
 DIA_DA_SEMANA_ABREVIADO = {
-    0: 'seg',
-    1: 'ter',
-    2: 'qua',
-    3: 'qui',
-    4: 'sex',
-    5: 'sáb',
-    6: 'dom',
+    DIA_SEGUNDA: 'seg',
+    DIA_TERCA: 'ter',
+    DIA_QUARTA: 'qua',
+    DIA_QUINTA: 'qui',
+    DIA_SEXTA: 'sex',
+    DIA_SABADO: 'sáb',
+    DIA_DOMINGO: 'dom',
 }
 
 MEIO_DIA = 'meio-dia'

@@ -6,7 +6,7 @@ from __future__ import (division, print_function, unicode_literals,
 
 from dateutil.relativedelta import relativedelta
 from datetime import date
-from ..data import hoje, parse_datetime, data_hora_horario_brasilia
+from ..data import hoje, parse_datetime, data_hora_horario_brasilia, DIA_SEXTA, DIA_DOMINGO
 from .feriado import (FERIADOS, monta_dicionario_datas)
 
 
@@ -43,9 +43,9 @@ def data_eh_feriado_emendado(data_referencia=hoje(), estado=None, municipio=None
     dia_antes = data_referencia + relativedelta(days=-1)
     dia_depois = data_referencia + relativedelta(days=+1)
 
-    dia_antes_eh_util = dia_antes.weekday() <= 4 and \
+    dia_antes_eh_util = dia_antes.weekday() <= DIA_SEXTA and \
         data_eh_feriado(dia_antes, estado, municipio) == []
-    dia_depois_eh_util = dia_depois.weekday() <= 4 and \
+    dia_depois_eh_util = dia_depois.weekday() <= DIA_SEXTA and \
         data_eh_feriado(dia_depois, estado, municipio) == []
 
     return not (dia_antes_eh_util or dia_depois_eh_util)
@@ -64,9 +64,9 @@ def data_eh_feriado_bancario_emendado(data_referencia=hoje(), estado=None, munic
     dia_antes = data_referencia + relativedelta(days=-1)
     dia_depois = data_referencia + relativedelta(days=+1)
 
-    dia_antes_eh_util = dia_antes.weekday() <= 4 and \
+    dia_antes_eh_util = dia_antes.weekday() <= DIA_SEXTA and \
         data_eh_feriado_bancario(dia_antes, estado, municipio) == []
-    dia_depois_eh_util = dia_depois.weekday() <= 4 and \
+    dia_depois_eh_util = dia_depois.weekday() <= DIA_SEXTA and \
         data_eh_feriado_bancario(dia_depois, estado, municipio) == []
 
     return not (dia_antes_eh_util or dia_depois_eh_util)
@@ -104,7 +104,7 @@ def conta_feriados_sem_domingo(data_inicial=hoje(), data_final=hoje(), estado=No
     data = data_inicial
 
     while data <= data_final:
-        if data.weekday() != 6:
+        if data.weekday() != DIA_DOMINGO:
             feriados = data_eh_feriado(data, estado, municipio)
 
             if feriados != []:

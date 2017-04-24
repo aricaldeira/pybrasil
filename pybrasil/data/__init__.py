@@ -4,7 +4,11 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
-from .nome import (DIA_DA_SEMANA, DIA_DA_SEMANA_ABREVIADO, MES, MES_ABREVIADO)
+from .nome import (DIA_DA_SEMANA, DIA_DA_SEMANA_ABREVIADO, MES, MES_ABREVIADO,
+   MES_JANEIRO, MES_FEVEREIRO, MES_MARCO, MES_ABRIL, MES_MAIO, MES_JUNHO,
+   MES_JULHO, MES_AGOSTO, MES_SETEMBRO, MES_OUTUBRO, MES_NOVEMBRO,
+   MES_DEZEMBRO, MESES, DIA_SEGUNDA, DIA_TERCA, DIA_QUARTA, DIA_QUINTA,
+   DIA_SEXTA, DIA_SABADO, DIA_DOMINGO, DIAS_DA_SEMANA)
 from .extenso import (data_por_extenso, dia_da_semana_por_extenso, dia_da_semana_por_extenso_abreviado, mes_por_extenso, mes_por_extenso_abreviado, mes_romano, seculo, seculo_por_extenso, seculo_romano, milenio, milenio_por_extenso, milenio_romano, hora_por_extenso, hora_por_extenso_aproximada, formata_data, ano_por_extenso, ano_romano)
 from .parserinfo import ParserInfoBrasil
 from .parse_datetime import parse_datetime
