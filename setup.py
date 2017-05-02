@@ -25,7 +25,7 @@ setup(
         '': ['*.txt'],
     },
     install_requires=[
-        'dateutil',
+        'python-dateutil',
         'pytz',
         'pyparsing',
         'mako'
