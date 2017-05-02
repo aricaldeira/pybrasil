@@ -13,4 +13,6 @@ python:
 script:
   - pip install .
   - pip install -r requirements.txt
- 
+test:
+  - python -c 'import pybrasil'
+

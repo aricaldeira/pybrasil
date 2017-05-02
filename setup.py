@@ -13,6 +13,7 @@ setup(
         'pybrasil.feriado',
         'pybrasil.produto',
         'pybrasil.telefone',
+        'pybrasil.template',
         'pybrasil.inscricao',
         'pybrasil.python_pt_BR'
     ],
