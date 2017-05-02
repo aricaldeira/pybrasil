@@ -13,6 +13,7 @@ setup(
         'pybrasil.feriado',
         'pybrasil.produto',
         'pybrasil.telefone',
+        'pybrasil.template',
         'pybrasil.inscricao',
         'pybrasil.python_pt_BR'
     ],
@@ -24,10 +25,10 @@ setup(
     package_data = {
         '': ['*.txt'],
     },
-    requires=[
-        'dateutil(>=2.6.0)',
-        'pytz(>=2016.10)',
-        'pyparsing(>=2.2.0)',
-        'mako(>=1.0.6)'
+    install_requires=[
+        'python-dateutil',
+        'pytz',
+        'pyparsing',
+        'mako'
     ],
 )
