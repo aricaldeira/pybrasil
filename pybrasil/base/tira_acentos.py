@@ -8,6 +8,7 @@ import unicodedata
 
 
 def tira_acentos(texto):
+    texto = texto.replace('°', 'o')
     return unicodedata.normalize(b'NFKD', texto).encode('ascii', 'ignore').encode('utf-8')
 
 
@@ -16,7 +17,9 @@ def somente_ascii(funcao):
     Usado como decorator
     '''
     def converter_para_ascii_puro(*args, **kwargs):
-        return unicodedata.normalize(b'NFKD', funcao(*args, **kwargs)).encode('ascii', 'ignore')
+        texto = funcao(*args, **kwargs)
+        texto = texto.replace('°', 'o')
+        return unicodedata.normalize(b'NFKD', texto).encode('ascii', 'ignore')
 
     return converter_para_ascii_puro
 
