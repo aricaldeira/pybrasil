@@ -103,4 +103,5 @@ Reforma Protestante|F|M|RS|4321808|Três de Maio|M|31||10||0|
 Aniversário de Marabá|F|M|PA|1504208|Marabá|M|3||4||0|
 Aniversário de Itajubá|F|M|MG|3132404|Itajubá|M|19||3||0|
 Aniversário de Brasília|F|M|DF|3132404|Brasília|M|21||4||0|
+Dia do Servidor Público|B|M|DF|3132404|Brasília|M|28||10||0|
 Aniversário de Jacareí|F|M|SP|3524402|Jacareí|M|3||4||0|
