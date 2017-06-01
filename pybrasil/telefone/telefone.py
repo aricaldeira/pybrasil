@@ -11,12 +11,10 @@ LIMPA = re.compile(r'[^\+0-9]')
 
 NUMERO_FIXO = re.compile(r'^' + DDDS + r'[23456][0-9]{7}$')
 NUMERO_FIXO_SEM_DDD = re.compile(r'^[23456][0-9]{7}$')
-#NUMERO_CELULAR = re.compile(r'^' + DDDS + r'[56789][0-9]{7}$')
-#NUMERO_CELULAR_SEM_DDD = re.compile(r'^[56789][0-9]{7}$')
-NUMERO_CELULAR_9 = re.compile(r'^' + DDDS + r'9[0-9]{8}$')
-NUMERO_CELULAR_9_SEM_DDD = re.compile(r'^9[0-9]{8}$')
-NUMERO_INTERNACIONAL = re.compile(r'^\+[0-9]{2-14}')
-NUMERO_INTERNACIONAL_BRASIL = re.compile(r'^\+55' + DDDS + r'([2345][0-9]{7}|[56789][0-9]{7}|9[0-9]{8})$')
+NUMERO_CELULAR = re.compile(r'^' + DDDS + r'9[0-9]{8}$')
+NUMERO_CELULAR_SEM_DDD = re.compile(r'^9[0-9]{8}$')
+NUMERO_INTERNACIONAL = re.compile(r'^\+[0-9]{2,14}')
+NUMERO_INTERNACIONAL_BRASIL = re.compile(r'^\+55' + DDDS + r'([23456][0-9]{7}|9[0-9]{8})$')
 NUMERO_ESPECIAL_0800 = re.compile(r'^0[3589]00[0-9]{6,7}$')
 NUMERO_ESPECIAL_4000 = re.compile(r'^[43][0-9]{7,8}$')
 
@@ -180,19 +178,19 @@ def valida_fone_celular(fone, valida_nono_digito=False):
 
         fone = fone[3:]
 
-    if not NUMERO_CELULAR_9.match(fone) and not NUMERO_CELULAR_9_SEM_DDD.match(fone):
+    if not NUMERO_CELULAR.match(fone) and not NUMERO_CELULAR_SEM_DDD.match(fone):
         return False
 
     ddd, fone = separa_fone(fone)
 
     if valida_nono_digito:
         if ddd in DDDS_NONO_DIGITO:
-            if NUMERO_CELULAR_9_SEM_DDD.match(fone):
+            if NUMERO_CELULAR_SEM_DDD.match(fone):
                 return True
             else:
                 return False
 
-    if not NUMERO_CELULAR_9_SEM_DDD.match(fone):
+    if not NUMERO_CELULAR_SEM_DDD.match(fone):
         return False
 
     return True
