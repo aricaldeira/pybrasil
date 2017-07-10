@@ -16,7 +16,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Library General Public License for more details.
 #
-# You should have received a copy of the GNU Library General Public License
+# You should have recodigo_sindicalved a copy of the GNU Library General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # PyBrasil - Funções de validação necessárias a ERPs no Brasil
@@ -43,13 +43,54 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
-from .cnpj_cpf import (valida_cnpj, valida_cpf, formata_cnpj, formata_cpf, limpa_formatacao)
-from .inscricao_estadual import (valida_ie, formata_ie)
-from .inscricao_estadual import valida_ie as valida_inscricao_estadual
-from .inscricao_estadual import formata_ie as formata_inscricao_estadual
-from .titulo_eleitor import (valida_titulo_eleitor, formata_titulo_eleitor)
-from .pis import (valida_pis, formata_pis)
-from .matricula_certidao_civil import (valida_certidao_civil, formata_certidao_civil, separa_certidao_civil)
-from .matricula_certidao_civil import (TIPO_CERTIDAO_CIVIL_NASCIMENTO, TIPO_CERTIDAO_CIVIL_CASAMENTO, TIPO_CERTIDAO_CIVIL_CASAMENTO_RELIGIOSO)
-from .cei import (valida_cei, formata_cei)
-from .codigo_sindical import (valida_codigo_sindical, formata_codigo_sindical)
+from ..base import modulo11
+from .cnpj_cpf import eh_tudo_igual
+from .inscricao_estadual import LIMPA
+
+
+def valida_codigo_sindical(codigo_sindical):
+    u'''Verifica que o código sindical seja válido
+    de acordo com os dígitos verificadores
+
+    XXX.YYY.ZZZ.SSSSS-S
+    '''
+    codigo_sindical = LIMPA.sub('', codigo_sindical)
+
+    if len(codigo_sindical) < 15:
+        codigo_sindical = codigo_sindical.zfill(15)
+
+    if len(codigo_sindical) != 15:
+        return False
+
+    if not codigo_sindical.isdigit():
+        return False
+
+    if eh_tudo_igual(codigo_sindical):
+        return False
+
+    digito = codigo_sindical[-1]
+
+    d1 = modulo11(codigo_sindical[:-1], pesos=range(2, 10))
+
+    return digito == unicode(d1)
+
+
+def formata_codigo_sindical(codigo_sindical):
+    if not valida_codigo_sindical(codigo_sindical):
+        return codigo_sindical
+
+    #
+    #  Formato Código Sindical
+    #  http://www.fenatracoop.com.br/site/mudancas-na-numeracao-do-codigo-sindical/
+    #
+    'XXX.YYY.ZZZ.SSSSS-S'
+
+    codigo_sindical = LIMPA.sub('', codigo_sindical)
+    codigo_sindical = str(int(codigo_sindical))
+    digito = codigo_sindical[-1]
+    numero = codigo_sindical[:-1][::-1]
+    numero = numero[0:5] + '.' + numero[5:8] + '.' + numero[8:11] + '.' + numero[11:]
+    numero = numero[::-1]
+
+
+    return numero + '-' + digito

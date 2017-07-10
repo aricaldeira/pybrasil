@@ -49,7 +49,7 @@ from .inscricao_estadual import LIMPA
 
 
 def valida_cei(cei):
-    u'''Verifica que o PIS seja válido
+    u'''Verifica que o CEI seja válido
     de acordo com os dígitos verificadores
     '''
     cei = LIMPA.sub('', cei)
@@ -68,11 +68,7 @@ def valida_cei(cei):
 
     digito = cei[-1]
 
-    digito = cei[-1]
-
     d1 = modulo11(cei[:-1], pesos=range(2, 10))
-
-    print(d1, 'digito')
 
     return digito == unicode(d1)
 
