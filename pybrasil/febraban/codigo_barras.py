@@ -175,9 +175,9 @@ def identifica_codigo_barras(codigo_barras):
         return
 
     if valida_codigo_barras_boleto(codigo_barras):
-        pass
+        return identifica_codigo_barras_boleto(codigo_barras)
     elif valida_codigo_barras_arrecadacao(codigo_barras):
-        pass
+        return identifica_codigo_barras_arrecadacao(codigo_barras)
 
 
 def identifica_codigo_barras_boleto(codigo_barras):
