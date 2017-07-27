@@ -86,7 +86,7 @@ def formata_codigo_sindical(codigo_sindical):
     'XXX.YYY.ZZZ.SSSSS-S'
 
     codigo_sindical = LIMPA.sub('', codigo_sindical)
-    codigo_sindical = str(int(codigo_sindical))
+    codigo_sindical = str(int(codigo_sindical)).zfill(15)
     digito = codigo_sindical[-1]
     numero = codigo_sindical[:-1][::-1]
     numero = numero[0:5] + '.' + numero[5:8] + '.' + numero[8:11] + '.' + numero[11:]
