@@ -70,7 +70,7 @@ def valida_codigo_sindical(codigo_sindical):
 
     digito = codigo_sindical[-1]
 
-    d1 = modulo11(codigo_sindical)
+    d1 = modulo11(codigo_sindical[:-1])
 
     return digito == unicode(d1)
 
