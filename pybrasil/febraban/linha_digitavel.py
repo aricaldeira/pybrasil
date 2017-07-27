@@ -101,11 +101,13 @@ def valida_linha_digitavel_boleto(linha_digitavel,
     campo_4 = linha_digitavel[33:37]
     campo_5 = linha_digitavel[37:]
 
+    if retorna_codigo_barras:
+        codigo_barras = campo_1[0:4] + dv_informado + campo_4 + campo_5 + \
+            campo_1[4:] + campo_2 + campo_3
+        return codigo_barras
+
     codigo_barras = campo_1[0:4] + campo_4 + campo_5 + campo_1[4:] + \
         campo_2 + campo_3
-
-    if retorna_codigo_barras:
-        return codigo_barras
 
     dv1_calculado = str(modulo10(campo_1, modulo=False))
     dv2_calculado = str(modulo10(campo_2, modulo=False))
