@@ -1,21 +1,22 @@
 from distutils.core import setup
-
 setup(
     name='pybrasil',
-    version='0.0.0.1',
+    version='0.0.0.2',
     packages=[
         'pybrasil',
-        'pybrasil.ncm',
         'pybrasil.base',
         'pybrasil.data',
-        'pybrasil.ibge',
-        'pybrasil.valor',
+        'pybrasil.febraban',
         'pybrasil.feriado',
+        'pybrasil.ibge',
+        'pybrasil.inscricao',
+        'pybrasil.ncm',
+        'pybrasil.valor',
         'pybrasil.produto',
+        'pybrasil.python_pt_BR'
         'pybrasil.telefone',
         'pybrasil.template',
-        'pybrasil.inscricao',
-        'pybrasil.python_pt_BR'
+        'pybrasil.valor',
     ],
     url='git@github.com:aricaldeira/pybrasil.git',
     license='',
@@ -32,3 +33,4 @@ setup(
         'mako'
     ],
 )
+
