@@ -13,7 +13,7 @@ setup(
         'pybrasil.ncm',
         'pybrasil.valor',
         'pybrasil.produto',
-        'pybrasil.python_pt_BR'
+        'pybrasil.python_pt_BR',
         'pybrasil.telefone',
         'pybrasil.template',
         'pybrasil.valor',
