@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 #
 # PyBrasil - Functions useful for most Brazil's ERPs
 #
@@ -43,6 +42,7 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
+from collections import namedtuple
 from dateutil.relativedelta import relativedelta
 from .fuso_horario import data_hora_horario_brasilia, hoje
 from .parse_datetime import parse_datetime
@@ -83,6 +83,7 @@ def idade_meses(data_nascimento, data_referencia=hoje(), quinze_dias=False):
 
     return meses
 
+
 def idade_meses_sem_dia(data_nascimento, data_referencia=hoje()):
     #
     # Considera que as duas datas ocorrem no mesmo dia do mês
@@ -94,3 +95,30 @@ def idade_meses_sem_dia(data_nascimento, data_referencia=hoje()):
     data_referencia += relativedelta(day=1)
 
     return idade_meses(data_nascimento, data_referencia)
+
+
+def dias_coincidentes(data_inicial_periodo_1, data_final_periodo_1, data_inicial_periodo_2, data_final_periodo_2):
+    data_inicial_periodo_1 = parse_datetime(data_inicial_periodo_1)
+    data_inicial_periodo_1 = data_hora_horario_brasilia(data_inicial_periodo_1)
+    data_inicial_periodo_1 = data_inicial_periodo_1.date()
+
+    data_final_periodo_1 = parse_datetime(data_final_periodo_1)
+    data_final_periodo_1 = data_hora_horario_brasilia(data_final_periodo_1)
+    data_final_periodo_1 = data_final_periodo_1.date()
+
+    data_inicial_periodo_2 = parse_datetime(data_inicial_periodo_2)
+    data_inicial_periodo_2 = data_hora_horario_brasilia(data_inicial_periodo_2)
+    data_inicial_periodo_2 = data_inicial_periodo_2.date()
+
+    data_final_periodo_2 = parse_datetime(data_final_periodo_2)
+    data_final_periodo_2 = data_hora_horario_brasilia(data_final_periodo_2)
+    data_final_periodo_2 = data_final_periodo_2.date()
+
+    Periodo = namedtuple('Periodo', ['data_inicial', 'data_final'])
+    periodo_1 = Periodo(data_inicial=data_inicial_periodo_1, data_final=data_final_periodo_1)
+    periodo_2 = Periodo(data_inicial=data_inicial_periodo_2, data_final=data_final_periodo_2)
+    ultima_data_inicial = max(periodo_1.data_inicial, periodo_2.data_inicial)
+    primeira_data_final = min(periodo_1.data_final, periodo_2.data_final)
+
+    dias_coincidentes = (primeira_data_final - ultima_data_inicial).days + 1
+    return dias_coincidentes
