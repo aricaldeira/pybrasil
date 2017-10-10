@@ -105,3 +105,7 @@ Aniversário de Itajubá|F|M|MG|3132404|Itajubá|M|19||3||0|
 Aniversário de Brasília|F|M|DF|3132404|Brasília|M|21||4||0|
 Dia do Servidor Público|B|M|DF|3132404|Brasília|M|28||10||0|
 Aniversário de Jacareí|F|M|SP|3524402|Jacareí|M|3||4||0|
+Aniversário de Limeira|F|M|SP|3526902|Limeira|M|15||9||0|
+Aniversário do Padre Cícero|F|M|CE|2307304|Juazeiro do Norte|M|24||3||0|
+Aniversário de Juazeiro do Norte|F|M|CE|2307304|Juazeiro do Norte|M|22||7||0|
+Nossa Senhora das Dores|F|M|CE|2307304|Juazeiro do Norte|M|15||9||0|
