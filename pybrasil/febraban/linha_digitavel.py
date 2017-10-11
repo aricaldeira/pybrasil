@@ -2,8 +2,8 @@
 #
 # PyBrasil - Functions useful for most Brazil's ERPs
 #
-# Copyright (C) 2016-
-# Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
+# Copyright (C) 2017-
+# Copyright (C) Ari Caldeira <ari.caldeira at tauga.com.br>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Library General Public License as
@@ -20,8 +20,8 @@
 #
 # PyBrasil - Funções de validação necessárias a ERPs no Brasil
 #
-# Copyright (C) 2016-
-# Copyright (C) Aristides Caldeira <aristides.caldeira arroba tauga.com.br>
+# Copyright (C) 2017-
+# Copyright (C) Ari Caldeira <ari.caldeira arroba tauga.com.br>
 #
 # Este programa é um software livre: você pode redistribuir e/ou modificar
 # este programa sob os termos da licença GNU Library General Public License,

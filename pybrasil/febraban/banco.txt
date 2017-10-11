@@ -1,0 +1,10 @@
+CODIGO|NOME
+001|Banco do Brasil
+033|Santander
+085|VIACREDI
+104|Caixa
+136|UNICRED
+237|Bradesco
+341|Itaú
+748|SICREDI
+756|SICOOB
