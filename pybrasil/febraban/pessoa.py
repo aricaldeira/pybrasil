@@ -41,6 +41,7 @@
 from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
+from genshi.core import Markup
 from ..inscricao import (valida_cnpj, valida_cpf, formata_cnpj, formata_cpf, limpa_formatacao)
 from .banco import Banco
 from ..data import hoje
@@ -148,7 +149,7 @@ class Pagador(object):
     def impressao(self):
         texto = self.nome + '\n'
         texto += self.endereco_completo
-        return texto.replace('\n', '<br/>')
+        return Markup(texto.replace('\n', '<text:line-break/>'))
 
     @property
     def impressao_sacador(self):
@@ -159,7 +160,7 @@ class Pagador(object):
         texto += ' - CNPJ ' + self.cnpj_cpf
         texto += '\n'
         texto += self.endereco_completo_uma_linha
-        return texto.replace('\n', '<br/>')
+        return Markup(texto.replace('\n', '<text:line-break/>'))
 
 
 class NumeroDigito(object):
@@ -174,7 +175,7 @@ class Beneficiario(Pagador):
         self.banco = Banco()
         self.agencia = NumeroDigito()
         self.conta = NumeroDigito()
-        self.codigo_beneficiario = NumeroDigito()
+        self.codigo = NumeroDigito()
 
     @property
     def agencia_conta(self):

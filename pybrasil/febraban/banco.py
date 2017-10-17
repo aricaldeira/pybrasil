@@ -43,6 +43,7 @@ from __future__ import (division, print_function, unicode_literals,
 
 import os
 import base64
+from StringIO import StringIO
 from datetime import date
 from ..base import modulo11, modulo10, tira_acentos
 
@@ -60,6 +61,25 @@ class Banco(object):
         else:
             self.logo = None
             self.arquivo_logo = ''
+
+        self.arquivo_template_boleto = os.path.join(CURDIR,
+            'template_boleto', codigo + '.odt')
+        self.arquivo_template_boleto_geral = os.path.join(CURDIR,
+            'template_boleto', 'boleto.odt')
+
+        if os.path.exists(self.arquivo_template_boleto):
+            self.template_boleto = StringIO()
+            self.template_boleto.write(
+                open(self.arquivo_template_boleto, 'rb').read())
+            self.template_boleto.seek(0)
+        elif os.path.exists(self.arquivo_template_boleto_geral):
+            self.template_boleto = StringIO()
+            self.template_boleto.write(open(
+                self.arquivo_template_boleto_geral, 'rb').read())
+            self.template_boleto.seek(0)
+        else:
+            self.template_boleto = None
+            self.arquivo_template_boleto = ''
 
         self.carteira = ''
         self.modalidade = ''
@@ -129,21 +149,28 @@ class Banco(object):
         return ''
 
     def carteira_nosso_numero(self, boleto):
-        return '%s/%s-%s' % (boleto.banco.carteira, boleto.nosso_numero, boleto.digito_nosso_numero)
+        return '%s/%s-%s' % (boleto.banco.carteira, boleto.nosso_numero,
+                             boleto.digito_nosso_numero)
 
     def agencia_conta(self, boleto):
         if boleto.beneficiario.conta.digito:
-            return '%s/%s-%s' % (boleto.beneficiario.agencia.numero, boleto.beneficiario.conta.numero, boleto.beneficiario.conta.digito)
+            return '%s/%s-%s' % (boleto.beneficiario.agencia.numero,
+                                 boleto.beneficiario.conta.numero,
+                                 boleto.beneficiario.conta.digito)
 
         else:
-            return '%s/%s' % (boleto.beneficiario.agencia.numero, boleto.beneficiario.conta.numero)
+            return '%s/%s' % (boleto.beneficiario.agencia.numero,
+                              boleto.beneficiario.conta.numero)
 
     def agencia_codigo_beneficiario(self, boleto):
         if boleto.beneficiario.codigo.digito:
-            return '%s/%s-%s' % (boleto.beneficiario.agencia.numero, boleto.beneficiario.codigo.numero, boleto.beneficiario.codigo.digito)
+            return '%s/%s-%s' % (boleto.beneficiario.agencia.numero,
+                                 boleto.beneficiario.codigo.numero,
+                                 boleto.beneficiario.codigo.digito)
 
         else:
-            return '%s/%s' % (boleto.beneficiario.agencia.numero, boleto.beneficiario.codigo.numero)
+            return '%s/%s' % (boleto.beneficiario.agencia.numero,
+                              boleto.beneficiario.codigo.numero)
 
     def imprime_carteira(self, boleto):
         return boleto.banco.carteira

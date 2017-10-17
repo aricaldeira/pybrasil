@@ -41,13 +41,22 @@
 from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
+from StringIO import StringIO
+import tempfile
+import sh
+from genshi.core import Markup
+import os
+from py3o.template import Template
+from reportlab.graphics.barcode import createBarcodeDrawing
+from reportlab.lib.units import cm, mm
+
+from datetime import date, datetime
 from ..base import modulo10
 from ..valor import formata_valor
 from ..data import parse_datetime, formata_data
 from .pessoa import Beneficiario, Pagador
 from .banco import Banco
 from .codigo_barras import monta_linha_digitavel_boleto
-from datetime import date, datetime
 
 
 class Documento(object):
@@ -153,6 +162,8 @@ class Boleto(object):
 
         self.descricao = []
         self.instrucoes = []
+
+        self.template_boleto = None
 
     def _set_data(self, valor):
         if valor is None or isinstance(valor, date):
@@ -348,16 +359,24 @@ class Boleto(object):
         return codigo_barras
 
     @property
+    def imagem_codigo_barras(self):
+        imagem = createBarcodeDrawing('I2of5', value=self.codigo_barras,
+                                      barHeight=16.5*mm, height=16.5*mm,
+                                      ratio=3, bearers=0, quiet=0, checksum=0,
+                                      barWidth=0.5*mm)
+        return imagem.asString('png').encode('base64')
+
+    @property
     def linha_digitavel(self):
         return monta_linha_digitavel_boleto(self.codigo_barras)
 
     @property
     def descricao_impressao(self):
-        return '<br/>'.join(self.descricao)
+        return Markup('<text:line-break/>'.join(self.descricao))
 
     @property
     def instrucoes_impressao(self):
-        return '<br/>'.join(self.instrucoes)
+        return Markup('<text:line-break/>'.join(self.instrucoes))
 
     @property
     def comando_remessa_descricao(self):
@@ -376,14 +395,16 @@ class Boleto(object):
     @property
     def comando_remessa_descricao_grupo(self):
         if self.comando in self.banco.descricao_comandos_remessa:
-            return self.comando + ' - ' + self.banco.descricao_comandos_remessa[self.comando]
+            return self.comando + ' - ' + \
+                self.banco.descricao_comandos_remessa[self.comando]
         else:
             return self.comando
 
     @property
     def comando_retorno_descricao_grupo(self):
         if self.comando in self.banco.descricao_comandos_retorno:
-            return self.comando + ' - ' + self.banco.descricao_comandos_retorno[self.comando]
+            return self.comando + ' - ' + \
+                self.banco.descricao_comandos_retorno[self.comando]
         else:
             return self.comando
 
@@ -402,3 +423,36 @@ class Boleto(object):
     @property
     def imprime_carteira(self):
         return self.banco.imprime_carteira(self)
+
+    @property
+    def pdf(self):
+        return gera_pdf_boletos([self])
+
+
+def gera_pdf_boletos(lista_boletos, template_boleto=None):
+    if template_boleto is None:
+        boleto = lista_boletos[0]
+
+        if boleto.template_boleto is not None:
+            if isinstance(boleto.template_boleto, basestring):
+                template_boleto = StringIO().write(
+                    open(boleto.arquivo_template_boleto, 'rb').read())
+            else:
+                template_boleto = boleto.template_boleto
+        else:
+            template_boleto = boleto.banco.template_boleto
+
+    arquivo_renderizado = tempfile.NamedTemporaryFile(delete=False)
+    arquivo_pdf = arquivo_renderizado.name + '.pdf'
+
+    template = Template(template_boleto, arquivo_renderizado.name)
+    template.render({'boletos': lista_boletos})
+    sh.libreoffice('--headless', '--invisible', '--convert-to', 'pdf',
+                   '--outdir', '/tmp', arquivo_renderizado.name)
+
+    pdf = open(arquivo_pdf, 'rb').read()
+
+    os.remove(arquivo_pdf)
+    os.remove(arquivo_renderizado.name)
+
+    return pdf

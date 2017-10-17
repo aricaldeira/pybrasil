@@ -50,4 +50,4 @@ from .banco import Banco
 from .remessa_boleto import RemessaBoleto
 from .retorno_boleto import RetornoBoleto
 from .lista_banco import BANCO_CODIGO
-from .boleto import Boleto
+from .boleto import Boleto, gera_pdf_boletos
