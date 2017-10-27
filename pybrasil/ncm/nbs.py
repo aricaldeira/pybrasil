@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 #
 # PyBrasil - Functions useful for most Brazil's ERPs
 #
@@ -43,12 +42,15 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 import os
 import sys
-from decimal import Decimal as D
+from future.utils import python_2_unicode_compatible
+from io import open
+from ..valor.decimal import Decimal as D
 
 
 CURDIR = os.path.dirname(os.path.abspath(__file__))
 
 
+@python_2_unicode_compatible
 class NBS(object):
     def __init__(self, codigo='', descricao='', al_ibpt_nacional=0, al_ibpt_internacional=0):
         self.codigo = codigo
@@ -57,9 +59,6 @@ class NBS(object):
         self.al_ibpt_internacional = al_ibpt_internacional
 
     def __str__(self):
-        return unicode.encode(self.__unicode__(), 'utf-8')
-
-    def __unicode__(self):
         return self.codigo + ' - ' + self.descricao
 
     def __repr__(self):
@@ -69,7 +68,7 @@ class NBS(object):
 def _monta_dicionario():
     dicionario = {}
 
-    arquivo = open(os.path.join(CURDIR, 'nbs.txt'), 'r')
+    arquivo = open(os.path.join(CURDIR, 'nbs.txt'), 'r', encoding='utf-8')
 
     #
     # Pula a primeira linha
@@ -77,7 +76,7 @@ def _monta_dicionario():
     arquivo.readline()
 
     for linha in arquivo:
-        linha = linha.decode('utf-8').replace('\n', '').replace('\r', '')
+        linha = linha.replace('\n', '').replace('\r', '')
         campos = linha.split('|')
         e = NBS(codigo=campos[0], descricao=campos[1], al_ibpt_nacional=D(campos[2] or '0'), al_ibpt_internacional=D(campos[3] or '0'))
 
