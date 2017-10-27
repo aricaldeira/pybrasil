@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 #
 # PyBrasil - Functions useful for most Brazil's ERPs
 #
@@ -42,7 +41,7 @@
 from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
-
+from builtins import str
 from dateutil.relativedelta import relativedelta
 from .fuso_horario import data_hora_horario_brasilia, hoje
 from .parse_datetime import parse_datetime
@@ -60,7 +59,7 @@ def dias_uteis(data_inicial=hoje(), data_final=hoje(), estado=None, municipio=No
     data_final = data_hora_horario_brasilia(data_final)
     data_final = data_final.date()
 
-    chave = unicode(data_inicial) + '_' + unicode(data_final) + '_' + unicode(estado) + '_' + unicode(municipio)
+    chave = str(data_inicial) + '_' + str(data_final) + '_' + str(estado) + '_' + str(municipio)
 
     if chave in DIAS_UTEIS:
         return DIAS_UTEIS[chave]

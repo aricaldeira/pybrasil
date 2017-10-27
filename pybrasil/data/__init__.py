@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 #
 # PyBrasil - Functions useful for most Brazil's ERPs
 #

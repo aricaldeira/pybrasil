@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 #
 # PyBrasil - Functions useful for most Brazil's ERPs
 #
@@ -43,7 +42,9 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
+import sys
 import re
+from builtins import str
 from datetime import date, time, datetime
 from .nome import *
 from ..valor import numero_por_extenso, numero_por_extenso_ordinal, numero_por_extenso_unidade, romano
@@ -120,13 +121,13 @@ def data_por_extenso(data=hoje(), numeros_por_extenso=False, legales=False):
             texto_data += ' de ' + mes_por_extenso(data)
             texto_data += ' de ' + numero_por_extenso(data.year)
     else:
-        texto_data = unicode(data.day)
+        texto_data = str(data.day)
 
         if data.day == 1:
             texto_data += 'º'
 
         texto_data += ' de ' + mes_por_extenso(data)
-        texto_data += ' de ' + unicode(data.year)
+        texto_data += ' de ' + str(data.year)
 
     return texto_data
 
@@ -326,4 +327,7 @@ def formata_data(data=hoje(), formato='%d/%m/%Y'):
     if data is None:
         return ''
 
-    return data.strftime(formato.encode('utf-8')).decode('utf-8')
+    if sys.version_info.major == 2:
+        return data.strftime(formato.encode('utf-8')).decode('utf-8')
+    else:
+        return data.strftime(formato)
