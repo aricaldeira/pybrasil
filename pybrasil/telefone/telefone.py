@@ -42,7 +42,7 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 import re
-from .ddd import DDDS, DDDS_NONO_DIGITO
+from .ddd import DDDS
 
 
 LIMPA = re.compile(r'[^\+0-9]')
@@ -132,7 +132,7 @@ def formata_fone(fone, valida_nono_digito=False, ddd_padrao='', formato_celular=
         ddd = ddd_padrao
 
     if ddd:
-        if valida_fone_celular(numero, valida_nono_digito=False) and ddd in DDDS_NONO_DIGITO:
+        if valida_fone_celular(numero, valida_nono_digito=False):
             if len(numero) == 8:
                 numero = '9' + numero
 
@@ -222,11 +222,10 @@ def valida_fone_celular(fone, valida_nono_digito=False):
     ddd, fone = separa_fone(fone)
 
     if valida_nono_digito:
-        if ddd in DDDS_NONO_DIGITO:
-            if NUMERO_CELULAR_SEM_DDD.match(fone):
-                return True
-            else:
-                return False
+        if NUMERO_CELULAR_SEM_DDD.match(fone):
+            return True
+        else:
+            return False
 
     if not NUMERO_CELULAR_SEM_DDD.match(fone):
         return False
