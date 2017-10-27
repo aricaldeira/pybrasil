@@ -43,7 +43,7 @@ from __future__ import (division, print_function, unicode_literals,
 
 import os
 import base64
-from StringIO import StringIO
+from io import BytesIO
 from datetime import date
 from ..base import modulo11, modulo10, tira_acentos
 
@@ -68,12 +68,12 @@ class Banco(object):
             'template_boleto', 'boleto.odt')
 
         if os.path.exists(self.arquivo_template_boleto):
-            self.template_boleto = StringIO()
+            self.template_boleto = BytesIO()
             self.template_boleto.write(
                 open(self.arquivo_template_boleto, 'rb').read())
             self.template_boleto.seek(0)
         elif os.path.exists(self.arquivo_template_boleto_geral):
-            self.template_boleto = StringIO()
+            self.template_boleto = BytesIO()
             self.template_boleto.write(open(
                 self.arquivo_template_boleto_geral, 'rb').read())
             self.template_boleto.seek(0)
@@ -134,6 +134,9 @@ class Banco(object):
 
         else:
             return '%s-%s' % (self.codigo.zfill(3), self.digito)
+
+    def local_pagamento(self):
+        return 'Pagável em qualquer banco até o vencimento'
 
     def fator_vencimento(self, boleto):
         fator_vencimento = boleto.data_vencimento - date(1997, 10, 7)

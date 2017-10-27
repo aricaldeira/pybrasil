@@ -41,6 +41,7 @@
 from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
+from builtins import str
 from pybrasil.valor.decimal import Decimal as D
 from pybrasil.data import parse_datetime
 from pybrasil.febraban.boleto import Boleto
@@ -238,7 +239,7 @@ def header_retorno_400(self, retorno):
 
     beneficiario = retorno.beneficiario
 
-    beneficiario.codigo.numero = unicode(D(header[110:117]))
+    beneficiario.codigo.numero = str(D(header[110:117]))
     beneficiario.nome = header[46:76]
 
     retorno.data_hora = parse_datetime(header[94:100]).date()
@@ -350,12 +351,12 @@ def linha_retorno_400(self, retorno):
 
         #
         # Para pegar o último dígito (que não era o DV antes) - 01/06/2016 10:15
-        # boleto.nosso_numero = unicode(D(linha[62:70]))
+        # boleto.nosso_numero = str(D(linha[62:70]))
         #
         # Para ignorar o último dígito (que passou a ser o DV) - 01/06/2016 10:15
-        # boleto.nosso_numero = unicode(D(linha[62:69]))
+        # boleto.nosso_numero = str(D(linha[62:69]))
         #
-        boleto.nosso_numero = unicode(D(linha[62:69]))
+        boleto.nosso_numero = str(D(linha[62:69]))
         #boleto.nosso_numero_digito = linha[82]
 
         if linha[107] == '5':

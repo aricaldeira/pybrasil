@@ -42,6 +42,7 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 import os
 import sys
+from io import open
 from ..base import tira_acentos
 from ..ibge.municipio import MUNICIPIO_ESTADO_NOME
 
@@ -54,7 +55,7 @@ def _monta_dicionario_segmento(segmento):
 
     arquivo = open(os.path.join(CURDIR,
         'codigo_barras_arrecadacao_segmento_{segmento}.txt'.format(
-            segmento=segmento)), 'r')
+            segmento=segmento)), 'r', encoding='utf-8')
 
     #
     # Pula a primeira linha
@@ -62,7 +63,7 @@ def _monta_dicionario_segmento(segmento):
     arquivo.readline()
 
     for linha in arquivo:
-        linha = linha.decode('utf-8').replace('\n', '').replace('\r', '')
+        linha = linha.replace('\n', '').replace('\r', '')
         codigo, nome, estado = linha.split('|')
         codigo = codigo.strip()
         nome = nome.strip().upper()

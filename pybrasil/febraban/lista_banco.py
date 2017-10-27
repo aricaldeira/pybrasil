@@ -45,6 +45,7 @@ from imp import load_source
 import os
 import sys
 import types
+from io import open
 from .banco import Banco
 
 
@@ -54,7 +55,7 @@ CURDIR = os.path.dirname(os.path.abspath(__file__))
 def _monta_dicionario_codigo():
     dicionario = {}
 
-    arquivo = open(os.path.join(CURDIR, 'banco.txt'), 'r')
+    arquivo = open(os.path.join(CURDIR, 'banco.txt'), 'r', encoding='utf-8')
 
     #
     # Pula a primeira linha
@@ -62,7 +63,7 @@ def _monta_dicionario_codigo():
     arquivo.readline()
 
     for linha in arquivo:
-        linha = linha.decode('utf-8').replace('\n', '').replace('\r', '')
+        linha = linha.replace('\n', '').replace('\r', '')
         campos = linha.split('|')
         codigo = campos[0]
         nome = campos[1]
@@ -85,6 +86,9 @@ def _monta_dicionario_codigo():
 
             if hasattr(modulo, 'fator_vencimento'):
                 b.fator_vencimento = types.MethodType(getattr(modulo, 'fator_vencimento'), b)
+
+            if hasattr(modulo, 'local_pagamento'):
+                b.local_pagamento = types.MethodType(getattr(modulo, 'local_pagamento'), b)
 
             #
             # Impressão especial de cada banco

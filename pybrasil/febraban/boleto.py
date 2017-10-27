@@ -41,7 +41,9 @@
 from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
-from StringIO import StringIO
+from past.builtins import basestring
+from io import BytesIO
+import base64
 import tempfile
 import sh
 from genshi.core import Markup
@@ -74,7 +76,7 @@ class Documento(object):
         if isinstance(valor, datetime):
             return valor.date()
 
-        if isinstance(valor, (str, unicode)):
+        if isinstance(valor, (basestring)):
             try:
                 data = parse_datetime(valor)
                 return data.date()
@@ -108,7 +110,6 @@ class Boleto(object):
         self.pagador = Pagador()
         self.sacador = Beneficiario()
 
-        self.local_pagamento = 'Pagável em qualquer banco até o vencimento'
         self.aceite = 'N'
         self.moeda = '9'
         self.especie = 'R$'
@@ -172,7 +173,7 @@ class Boleto(object):
         if isinstance(valor, datetime):
             return valor.date()
 
-        if isinstance(valor, (str, unicode)):
+        if isinstance(valor, (basestring)):
             try:
                 data = parse_datetime(valor)
                 return data.date()
@@ -276,6 +277,10 @@ class Boleto(object):
         self._data_negativacao = self._set_data(valor)
 
     @property
+    def local_pagamento(self):
+        return self.banco.local_pagamento()
+
+    @property
     def imprime_desconto_formatado(self):
         if self.imprime_desconto:
             return formata_valor(self.imprime_desconto)
@@ -364,7 +369,7 @@ class Boleto(object):
                                       barHeight=16.5*mm, height=16.5*mm,
                                       ratio=3, bearers=0, quiet=0, checksum=0,
                                       barWidth=0.5*mm)
-        return imagem.asString('png').encode('base64')
+        return base64.b64encode(imagem.asString('png'))
 
     @property
     def linha_digitavel(self):
@@ -435,7 +440,7 @@ def gera_pdf_boletos(lista_boletos, template_boleto=None):
 
         if boleto.template_boleto is not None:
             if isinstance(boleto.template_boleto, basestring):
-                template_boleto = StringIO().write(
+                template_boleto = BytesIO().write(
                     open(boleto.arquivo_template_boleto, 'rb').read())
             else:
                 template_boleto = boleto.template_boleto

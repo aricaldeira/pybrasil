@@ -265,7 +265,7 @@ def header_retorno_400(self, retorno):
 
     beneficiario.agencia.numero = header[27:30]
     beneficiario.agencia.digito = header[30]
-    beneficiario.codigo.numero = unicode(D(header[31:39])).zfill(8)
+    beneficiario.codigo.numero = str(D(header[31:39])).zfill(8)
     beneficiario.codigo.digito = header[36]
     beneficiario.nome = header[46:76]
 
@@ -281,7 +281,7 @@ def linha_retorno_400(self, retorno):
     # Beneficiario
     #
     beneficiario.cnpj_cpf = linha[3:17]
-    beneficiario.conta.numero = unicode(D(linha[22:30]))
+    beneficiario.conta.numero = str(D(linha[22:30]))
     beneficiario.conta.digito = linha[30]
 
     for i in range(1, len(retorno.linhas) - 1):
@@ -291,7 +291,7 @@ def linha_retorno_400(self, retorno):
         boleto.banco = self
 
         boleto.identificacao = linha[38:63]
-        boleto.nosso_numero = unicode(D(linha[63:80]))
+        boleto.nosso_numero = str(D(linha[63:80]))
         #boleto.nosso_numero_digito = linha[73]
         boleto.parcela = int(linha[74:76])
         boleto.documento.especie = linha[83:85]

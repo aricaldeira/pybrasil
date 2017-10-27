@@ -41,6 +41,7 @@
 from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
+from past.builtins import basestring
 from ..base import tira_acentos
 from .lista_banco import BANCO_CODIGO
 from .pessoa import Beneficiario
@@ -60,7 +61,7 @@ class RetornoBoleto(object):
         self.codigo_ocorrencia = ''
 
     def arquivo_retorno(self, arquivo):
-        if isinstance(arquivo, (str, unicode)):
+        if isinstance(arquivo, basestring):
             arquivo = open(arquivo, 'r')
 
         for linha in arquivo.readlines():

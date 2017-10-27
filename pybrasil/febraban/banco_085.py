@@ -564,7 +564,7 @@ def header_retorno_400(self, retorno):
 
     beneficiario.agencia.numero = header[26:30]
     beneficiario.agencia.digito = header[30]
-    beneficiario.codigo.numero = unicode(D(header[31:39])).zfill(6)
+    beneficiario.codigo.numero = str(D(header[31:39])).zfill(6)
     beneficiario.codigo.digito = header[39]
     beneficiario.nome = header[46:76]
 
@@ -653,7 +653,7 @@ def linha_retorno_240(self, retorno):
             boleto = Boleto()
             boleto.beneficiario = retorno.beneficiario
             boleto.banco = self
-            boleto.nosso_numero = unicode(D(linha[37:57]))
+            boleto.nosso_numero = str(D(linha[37:57]))
 
             #boleto.nosso_numero_digito = linha[73]
             #boleto.parcela = int(linha[74:76])

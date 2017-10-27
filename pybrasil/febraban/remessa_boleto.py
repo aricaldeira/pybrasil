@@ -41,8 +41,9 @@
 from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
+from past.builtins import basestring
 from ..base import tira_acentos
-from ..data import parse_datetime
+from ..data import data_hora_horario_brasilia
 from datetime import date, datetime
 
 
@@ -60,9 +61,9 @@ class RemessaBoleto(object):
         if valor is None or isinstance(valor, (date, datetime)):
             return valor
 
-        if isinstance(valor, (str, unicode)):
+        if isinstance(valor, basestring):
             try:
-                return parse_datetime(valor)
+                return data_hora_horario_brasilia(valor)
             except:
                 return
 
@@ -85,9 +86,9 @@ class RemessaBoleto(object):
         self.registros = []
 
         if self.tipo == 'CNAB_400':
-            header = banco.header_remessa_400(self).split(b'\n')
+            header = banco.header_remessa_400(self).split('\n')
         elif self.tipo == 'CNAB_240':
-            header = banco.header_remessa_240(self).split(b'\n')
+            header = banco.header_remessa_240(self).split('\n')
 
         if isinstance(header, list):
             self.registros += header
@@ -98,9 +99,9 @@ class RemessaBoleto(object):
 
         for boleto in self.boletos:
             if self.tipo == 'CNAB_400':
-                linhas = banco.linha_remessa_400(self, boleto).split(b'\n')
+                linhas = banco.linha_remessa_400(self, boleto).split('\n')
             elif self.tipo == 'CNAB_240':
-                linhas = banco.linha_remessa_240(self, boleto).split(b'\n')
+                linhas = banco.linha_remessa_240(self, boleto).split('\n')
 
             self.valor_total += boleto.documento.valor
 
@@ -110,16 +111,16 @@ class RemessaBoleto(object):
                 self.registros += (linhas,)
 
         if self.tipo == 'CNAB_400':
-            trailler = banco.trailler_remessa_400(self).split(b'\n')
+            trailler = banco.trailler_remessa_400(self).split('\n')
         elif self.tipo == 'CNAB_240':
-            trailler = banco.trailler_remessa_240(self).split(b'\n')
+            trailler = banco.trailler_remessa_240(self).split('\n')
 
         if isinstance(trailler, list):
             self.registros += trailler
         else:
             self.registros += (trailler,)
 
-        texto = b'\r\n'.join(self.registros) + b'\r\n'
+        texto = '\r\n'.join(self.registros) + '\r\n'
 
         return texto
 

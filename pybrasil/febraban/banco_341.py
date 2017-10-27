@@ -41,6 +41,7 @@
 from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
+from builtins import str
 from pybrasil.valor.decimal import Decimal as D
 from pybrasil.data import parse_datetime
 from pybrasil.febraban.boleto import Boleto
@@ -210,7 +211,7 @@ def linha_remessa_400(self, remessa, boleto):
         texto += ''.zfill(2)
 
     texto += ''.ljust(1)
-    texto += str(len(remessa.registros) + 1).zfill(6)[:06]  # nº do registro
+    texto += str(len(remessa.registros) + 1).zfill(6)[:6]  # nº do registro
 
     return self.tira_acentos(texto.upper())
 
@@ -253,7 +254,7 @@ def linha_retorno_400(self, retorno):
         boleto.banco = self
 
         boleto.identificacao = linha[37:62]
-        boleto.nosso_numero = unicode(D(linha[62:70]))
+        boleto.nosso_numero = str(D(linha[62:70]))
         boleto.comando = linha[108:110]
         boleto.data_ocorrencia = parse_datetime(linha[110:116])
         boleto.documento.numero = linha[116:126]

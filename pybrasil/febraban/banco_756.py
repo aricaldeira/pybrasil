@@ -41,6 +41,7 @@
 from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
+from builtins import str
 from pybrasil.valor.decimal import Decimal as D
 from pybrasil.data import parse_datetime
 from pybrasil.febraban.boleto import Boleto
@@ -593,7 +594,7 @@ def header_retorno_400(self, retorno):
 
     beneficiario.agencia.numero = header[26:30]
     beneficiario.agencia.digito = header[30]
-    beneficiario.codigo.numero = unicode(D(header[31:39])).zfill(6)
+    beneficiario.codigo.numero = str(D(header[31:39])).zfill(6)
     beneficiario.codigo.digito = header[39]
     beneficiario.nome = header[46:76]
 
@@ -607,9 +608,9 @@ def header_retorno_240(self, retorno):
     beneficiario = retorno.beneficiario
 
     beneficiario.cnpj_cpf = header[18:32]
-    beneficiario.agencia.numero = unicode(D(header[52:57]))
+    beneficiario.agencia.numero = str(D(header[52:57]))
     beneficiario.agencia.digito = header[57]
-    beneficiario.conta.numero = unicode(D(header[58:70]))
+    beneficiario.conta.numero = str(D(header[58:70]))
     beneficiario.conta.digito = header[70]
     beneficiario.nome = header[72:102]
     retorno.data_hora = parse_datetime(header[143:151] + ' ' + header[151:157])
@@ -671,7 +672,7 @@ def linha_retorno_400(self, retorno):
     # Beneficiario
     #
     beneficiario.cnpj_cpf = linha[3:17]
-    beneficiario.conta.numero = unicode(D(linha[22:30]))
+    beneficiario.conta.numero = str(D(linha[22:30]))
     beneficiario.conta.digito = linha[30]
 
     for i in range(1, len(retorno.linhas) - 1):
@@ -680,7 +681,7 @@ def linha_retorno_400(self, retorno):
         boleto.beneficiario = retorno.beneficiario
         boleto.banco = self
 
-        boleto.nosso_numero = unicode(D(linha[62:73]))
+        boleto.nosso_numero = str(D(linha[62:73]))
         #boleto.nosso_numero_digito = linha[73]
         boleto.parcela = int(linha[74:76])
         boleto.documento.especie = linha[83:85]

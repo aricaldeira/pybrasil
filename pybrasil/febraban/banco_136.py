@@ -41,6 +41,7 @@
 from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
+from builtins import str
 from pybrasil.valor.decimal import Decimal as D
 from pybrasil.data import parse_datetime
 from pybrasil.febraban.boleto import Boleto
@@ -233,7 +234,7 @@ def header_retorno_400(self, retorno):
 
     #beneficiario.agencia.numero = header[26:30]
     #beneficiario.agencia.digito = header[30]
-    beneficiario.codigo.numero = unicode(D(header[26:46]))
+    beneficiario.codigo.numero = str(D(header[26:46]))
     #beneficiario.codigo.digito = header[39]
     beneficiario.nome = header[46:76]
 
@@ -332,7 +333,7 @@ def linha_retorno_400(self, retorno):
         boleto.banco = self
 
         boleto.identificacao = linha[37:62]
-        boleto.nosso_numero = unicode(D(linha[70:81]))
+        boleto.nosso_numero = str(D(linha[70:81]))
         #boleto.nosso_numero_digito = linha[82]
         boleto.banco.carteira = linha[107]
         boleto.comando = linha[108:110]

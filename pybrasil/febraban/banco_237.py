@@ -58,6 +58,10 @@ def limpa_nome(texto):
     return texto
 
 
+def local_pagamento(self):
+    return 'Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso'
+
+
 def calcula_digito_nosso_numero(self, boleto):
     boleto.banco.carteira = str(boleto.banco.carteira).zfill(2)
     boleto.nosso_numero = str(boleto.nosso_numero).zfill(11)
@@ -69,7 +73,7 @@ def calcula_digito_nosso_numero(self, boleto):
 
 
 def agencia_conta(self, boleto):
-    return '%s-%s/%s-%s' % (str(boleto.beneficiario.agencia.numero).zfill(4), boleto.beneficiario.agencia.digito, boleto.beneficiario.codigo.numero.zfill(7)[:7], boleto.beneficiario.codigo.digito)
+    return '%s-%s/%s-%s' % (str(boleto.beneficiario.agencia.numero).zfill(4), boleto.beneficiario.agencia.digito, boleto.beneficiario.conta.numero.zfill(7)[:7], boleto.beneficiario.conta.digito)
 
 
 def campo_livre(self, boleto):
@@ -98,7 +102,7 @@ def header_remessa_400(self, remessa):
     texto += beneficiario.nome.ljust(30)[:30]
     texto += '237'
     texto += 'BRADESCO'.ljust(15)
-    texto += remessa.data_hora.strftime(b'%d%m%y')
+    texto += remessa.data_hora.strftime('%d%m%y')
     texto += ''.ljust(8)
     texto += 'MX'
     texto += str(remessa.sequencia).zfill(7)
