@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 #
 # PyBrasil - Functions useful for most Brazil's ERPs
 #
@@ -43,9 +42,7 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 import sys
-
-if sys.version >= '3':
-    unicode = str
+from builtins import str
 
 import re
 
@@ -124,7 +121,7 @@ class ValidaIE(object):
             elif dv == 11:
                 dv = self.dv_acima_11
 
-        return unicode(dv)
+        return str(dv)
 
     def pre_valida_formata(self, ie):
         ie = LIMPA.sub('', ie)
@@ -411,7 +408,7 @@ class ValidaIEBA(ValidaIE):
             if dv > 9:
                 dv = 0
 
-        return unicode(dv)
+        return str(dv)
 
 
 class ValidaIECE(ValidaIE):
@@ -612,7 +609,7 @@ class ValidaIEMG(ValidaIE):
             peso = pesos[i]
             posicao = posicoes[i]
             numero = int(ie[posicao])
-            soma_texto += unicode(numero * peso)
+            soma_texto += str(numero * peso)
 
         soma = 0
         for c in soma_texto:
@@ -632,7 +629,7 @@ class ValidaIEMG(ValidaIE):
         if dv == 10:
             dv = 0
 
-        return unicode(dv)
+        return str(dv)
 
     def valida(self, ie):
         ie_a_validar = self.pre_valida_formata(ie)
@@ -1131,7 +1128,7 @@ class ValidaIERR(ValidaIE):
 
     def digito(self, ie, pesos, posicoes):
         dv = self.modulo(ie, pesos, posicoes)
-        return unicode(dv)
+        return str(dv)
 
 
 class ValidaIERS(ValidaIE):

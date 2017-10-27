@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 #
 # PyBrasil - Functions useful for most Brazil's ERPs
 #
@@ -43,6 +42,7 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
+from builtins import str
 from ..base import modulo11
 from .cnpj_cpf import eh_tudo_igual
 from .inscricao_estadual import LIMPA
@@ -74,7 +74,7 @@ def valida_pis(pis):
 
     print(d1, 'digito')
 
-    return digito == unicode(d1)
+    return digito == str(d1)
 
 
 def formata_pis(pis):
