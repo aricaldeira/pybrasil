@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 #
 # PyBrasil - Functions useful for most Brazil's ERPs
 #
@@ -43,7 +42,11 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 import os
 import sys
-from ..data import hoje, data_hora_horario_brasilia, parse_datetime
+from future.utils import python_2_unicode_compatible
+from builtins import str
+from past.builtins import basestring
+from io import open
+from ..data import hoje, data_hora_horario_brasilia, parse_datetime, formata_data
 from ..ibge import (Local, Municipio, Estado, MUNICIPIO_ESTADO_NOME, MUNICIPIO_IBGE, MUNICIPIO_SIAFI, ESTADO_IBGE, ESTADO_SIGLA)
 from ..base import tira_acentos
 from datetime import date
@@ -55,6 +58,7 @@ from copy import copy
 CURDIR = os.path.dirname(os.path.abspath(__file__))
 
 
+@python_2_unicode_compatible
 class Feriado(Local):
     def __init__(self, **kwargs):
         super(Feriado, self).__init__(**kwargs)
@@ -71,15 +75,12 @@ class Feriado(Local):
         self.data_referencia = hoje()
 
     def __str__(self):
-        return unicode.encode(self.__unicode__(), 'utf-8')
-
-    def __unicode__(self):
-        txt = self.nome + ' - ' + self.data_feriado.strftime('%a, %d-%b-%Y').decode('utf-8')
+        txt = self.nome + ' - ' + formata_data(self.data_feriado, '%a, %d-%b-%Y')
 
         if self.abrangencia == 'E':
-            txt += ', somente em ' + unicode(self.estado)
+            txt += ', somente em ' + str(self.estado)
         elif self.abrangencia == 'M':
-            txt += ', somente em ' + unicode(self.municipio)
+            txt += ', somente em ' + str(self.municipio)
 
         return txt
 
@@ -155,7 +156,7 @@ class Feriado(Local):
 def _monta_lista_feriados():
     lista = []
 
-    arquivo = open(os.path.join(CURDIR, 'feriado.txt'), 'r')
+    arquivo = open(os.path.join(CURDIR, 'feriado.txt'), 'r', encoding='utf-8')
 
     #
     # Pula a primeira linha
@@ -163,7 +164,7 @@ def _monta_lista_feriados():
     arquivo.readline()
 
     for linha in arquivo:
-        linha = linha.decode('utf-8').replace('\n', '').replace('\r', '')
+        linha = linha.replace('\n', '').replace('\r', '')
         campos = linha.split('|')
         nome, tipo, abrangencia, estado, municipio_ibge, municipio_nome, quando, dia, dia_da_semana, mes, ano, dias_de_diferenca, ajuste = campos
 
@@ -240,7 +241,7 @@ def monta_dicionario_datas(data_referencia=hoje(), tipo=None, estado=None, munic
                     if f.tipo not in tipo:
                         continue
 
-                elif isinstance(tipo, (str, unicode)):
+                elif isinstance(tipo, basestring):
                     if f.tipo != tipo:
                         continue
 
