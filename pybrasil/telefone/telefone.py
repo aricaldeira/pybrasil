@@ -97,7 +97,7 @@ def separa_fone(fone):
     return '', fone
 
 
-def formata_fone(fone, valida_nono_digito=False, ddd_padrao='', formato_celular=FORMATO_CELULAR_3_2_4):
+def formata_fone(fone, valida_nono_digito=False, ddd_padrao='', formato_celular=FORMATO_CELULAR_5_4):
     if not valida_fone(fone, valida_nono_digito=valida_nono_digito):
         return fone
 
