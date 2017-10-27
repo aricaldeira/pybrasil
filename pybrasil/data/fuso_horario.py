@@ -42,6 +42,7 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
+from past.builtins import basestring
 from pytz import (datetime, timezone, tzinfo, UTC)
 from datetime import datetime as datetime_sem_fuso, date, time
 from time import strftime
@@ -66,6 +67,9 @@ def fuso_horario_sistema():
 
 
 def data_hora_horario_brasilia(data):
+    if isinstance(data, basestring):
+        data = parse_datetime(data)
+
     if not isinstance(data, (datetime.datetime, datetime_sem_fuso, date, time)):
         return None
 
