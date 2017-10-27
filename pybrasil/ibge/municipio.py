@@ -42,6 +42,8 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 import os
 import sys
+from future.utils import python_2_unicode_compatible
+from io import open
 from ..base import tira_acentos
 from .pais import PAIS_BRASIL
 from .estado import ESTADO_SIGLA, Estado
@@ -50,6 +52,7 @@ from .estado import ESTADO_SIGLA, Estado
 CURDIR = os.path.dirname(os.path.abspath(__file__))
 
 
+@python_2_unicode_compatible
 class Municipio(object):
     def __init__(self, nome='', estado='', codigo_ibge='', codigo_siafi='', codigo_anp='',
                  pais=None, ddd='', cep=''):
@@ -68,9 +71,6 @@ class Municipio(object):
         self.cep = cep
 
     def __str__(self):
-        return unicode.encode(self.__unicode__(), 'utf-8')
-
-    def __unicode__(self):
         return self.nome + ' - ' + self.estado.sigla
 
     def __repr__(self):
@@ -80,7 +80,7 @@ class Municipio(object):
 def _monta_dicionario_ibge():
     dicionario = {}
 
-    arquivo = open(os.path.join(CURDIR, 'municipio.txt'), 'r')
+    arquivo = open(os.path.join(CURDIR, 'municipio.txt'), 'r', encoding='utf-8')
 
     #
     # Pula a primeira linha
@@ -88,7 +88,7 @@ def _monta_dicionario_ibge():
     arquivo.readline()
 
     for linha in arquivo:
-        linha = linha.decode('utf-8').replace('\n', '').replace('\r', '')
+        linha = linha.replace('\n', '').replace('\r', '')
         campos = linha.split('|')
         m = Municipio(nome=campos[0], estado=campos[1], codigo_ibge=campos[2], codigo_siafi=campos[3], codigo_anp=campos[4], ddd=campos[5], cep=campos[6])
 

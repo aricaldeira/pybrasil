@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 #
 # PyBrasil - Functions useful for most Brazil's ERPs
 #
@@ -44,6 +43,8 @@ from __future__ import (division, print_function, unicode_literals,
 
 
 import re
+from past.builtins import basestring
+from builtins import str
 from .pais import (Pais, PAIS_BACEN, PAIS_NOME, PAIS_BRASIL, PAIS_ISO_3166_2, PAIS_ISO_3166_3)
 from .estado import (Estado, ESTADO_IBGE, ESTADO_SIGLA)
 from .municipio import (Municipio, MUNICIPIO_ESTADO_NOME, MUNICIPIO_IBGE, MUNICIPIO_SIAFI)
@@ -68,7 +69,7 @@ class Local(object):
         if isinstance(valor, Pais):
             self._pais = valor
 
-        elif isinstance(valor, (str, unicode)):
+        elif isinstance(valor, basestring):
             if valor in PAIS_NOME:
                 self.pais = PAIS_NOME[valor]
             elif valor in PAIS_BACEN:
@@ -90,7 +91,7 @@ class Local(object):
         if isinstance(valor, Estado):
             self._estado = valor
 
-        elif isinstance(valor, (str, unicode)):
+        elif isinstance(valor, basestring):
             if valor in ESTADO_SIGLA:
                 self.estado = ESTADO_SIGLA[valor]
             elif valor in ESTADO_IBGE:
@@ -111,21 +112,21 @@ class Local(object):
             self.pais = self._municipio.pais
 
         elif isinstance(valor, (list, tuple)) and len(valor) == 2:
-            estado = unicode(valor[0]).upper()
-            municipio = unicode(valor[1]).upper()
+            estado = str(valor[0]).upper()
+            municipio = str(valor[1]).upper()
             municipio = tira_acentos(municipio)
             if estado in MUNICIPIO_ESTADO_NOME:
                 if municipio in MUNICIPIO_ESTADO_NOME[estado]:
                     self.municipio = MUNICIPIO_ESTADO_NOME[estado][municipio]
 
-        elif isinstance(valor, (str, unicode)):
+        elif isinstance(valor, basestring):
             if valor in MUNICIPIO_IBGE:
                 self.municipio = MUNICIPIO_IBGE[valor]
             elif valor in MUNICIPIO_SIAFI:
                 self.municipio = MUNICIPIO_SIAFI[valor]
             elif isinstance(self.estado, Estado) and self.estado.sigla != '':
                 estado = self.estado.sigla
-                municipio = unicode(valor).upper()
+                municipio = str(valor).upper()
                 municipio = tira_acentos(municipio)
                 self.municipio = (estado, municipio)
 
