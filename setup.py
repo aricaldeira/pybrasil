@@ -30,7 +30,9 @@ setup(
         'python-dateutil',
         'pytz',
         'pyparsing',
-        'mako'
+        'mako',
+        'future',
+        'py3o.template'
     ],
 )
 
