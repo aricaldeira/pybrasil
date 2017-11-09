@@ -140,8 +140,6 @@ class Certificado(object):
                                                self.certificado)
         self.cert_openssl = cert_openssl
 
-        self._emissor = dict(cert_openssl.get_issuer().get_components())
-        self._proprietario = dict(cert_openssl.get_subject().get_components())
         self._numero_serie = cert_openssl.get_serial_number()
 
         for i in range(cert_openssl.get_extension_count()):
@@ -154,7 +152,29 @@ class Certificado(object):
             self._data_fim_validade    = \
                 datetime.strptime(cert_openssl.get_notAfter().decode('utf-8'), '%Y%m%d%H%M%SZ')
 
+            self._emissor = {}
+            for chave, valor in cert_openssl.get_issuer().get_components():
+                if type(chave) == bytes:
+                    chave = chave.decode('utf-8')
+
+                if type(valor) == bytes:
+                    valor = valor.decode('utf-8')
+
+                self._emissor[chave] = valor
+
+            self._proprietario = {}
+            for chave, valor in cert_openssl.get_subject().get_components():
+                if type(chave) == bytes:
+                    chave = chave.decode('utf-8')
+
+                if type(valor) == bytes:
+                    valor = valor.decode('utf-8')
+
+                self._proprietario[chave] = valor
+
         else:
+            self._emissor = dict(cert_openssl.get_issuer().get_components())
+            self._proprietario = dict(cert_openssl.get_subject().get_components())
             self._data_inicio_validade = \
                 datetime.strptime(cert_openssl.get_notBefore(), '%Y%m%d%H%M%SZ')
             self._data_fim_validade    = \
