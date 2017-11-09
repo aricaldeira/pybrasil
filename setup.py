@@ -5,6 +5,7 @@ setup(
     packages=[
         'pybrasil',
         'pybrasil.base',
+        'pybrasil.certificado',
         'pybrasil.data',
         'pybrasil.febraban',
         'pybrasil.feriado',
@@ -32,7 +33,10 @@ setup(
         'pyparsing',
         'mako',
         'future',
-        'py3o.template'
+        'py3o.template',
+        'signxml',
+        'lxml',
+        'pyOpenSSL'
     ],
 )
 
