@@ -7,3 +7,5 @@ py3o.template==0.9.12
 signxml==2.4.0
 lxml==4.1.0
 pyOpenSSL==17.3.0
+sh==1.12.14
+reportlab==3.4.0

@@ -36,7 +36,9 @@ setup(
         'py3o.template',
         'signxml',
         'lxml',
-        'pyOpenSSL'
+        'pyOpenSSL',
+        'sh',
+        'reportlab'
     ],
 )
 
