@@ -629,6 +629,9 @@ class Decimal(object):
                 self._is_special = True
             return self
 
+        if value is None:
+            value = 0
+
         # From an integer
         if isinstance(value, (int,long)):
             if value >= 0:
