@@ -107,6 +107,9 @@ def dia_util_pagamento(data_vencimento=hoje(), estado=None, municipio=None, ante
 
     du = dias_uteis_bancarios(primeiro_dia, ultimo_dia, estado, municipio)
 
+    if data_vencimento in du:
+        return data_vencimento
+
     data_antecipada = None
 
     for data in du:

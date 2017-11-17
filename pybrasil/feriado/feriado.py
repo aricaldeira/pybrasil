@@ -234,7 +234,7 @@ def monta_dicionario_datas(data_referencia=hoje(), tipo=None, estado=None, munic
 
     dicionario = {}
 
-    for data, feriados in _monta_dicionario_datas(data_referencia).iteritems():
+    for data, feriados in _monta_dicionario_datas(data_referencia).items():
         for f in feriados:
             if tipo is not None:
                 if isinstance(tipo, (list, tuple)):
@@ -245,14 +245,22 @@ def monta_dicionario_datas(data_referencia=hoje(), tipo=None, estado=None, munic
                     if f.tipo != tipo:
                         continue
 
-            if estado is not None:
+            if estado is None:
+                if f.abrangencia == 'E' or f.abrangencia == 'M':
+                    continue
+
+            else:
                 if f.abrangencia == 'E' and f.estado != f_teste.estado:
                     continue
 
                 elif f.abrangencia == 'M' and f.municipio.estado != f_teste.estado:
                     continue
 
-            if municipio is not None:
+            if municipio is None:
+                if f.abrangencia == 'M':
+                    continue
+
+            else:
                 if f.abrangencia == 'E' and f.estado != f_teste.municipio.estado:
                     continue
 
