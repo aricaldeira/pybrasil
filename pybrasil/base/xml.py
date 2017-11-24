@@ -43,7 +43,7 @@ from __future__ import (division, print_function, unicode_literals,
 
 
 import re
-from lxml import etree
+from lxml import etree, objectify
 
 
 def tira_abertura(texto):
@@ -96,6 +96,12 @@ def escape_xml(texto, aspas=True):
         texto = texto.replace('"', '&quot;')
         texto = texto.replace("'", '&apos;')
 
+    #
+    # O ŭ da Taŭga
+    #
+    texto = texto.replace('Ŭ', '&#364;')
+    texto = texto.replace('ŭ', '&#365;')
+
     return texto
 
 
@@ -115,4 +121,14 @@ def unescape_xml(texto):
     texto = texto.replace('&LT;', '<')
     texto = texto.replace('&AMP;', '&')
 
+    #
+    # O ŭ da Taŭga
+    #
+    texto = texto.replace('&#364;', 'Ŭ')
+    texto = texto.replace('&#365;', 'ŭ')
+
     return texto
+
+
+def gera_objeto(texto):
+    return objectify.parse(texto)
