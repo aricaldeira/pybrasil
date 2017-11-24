@@ -50,6 +50,7 @@ from OpenSSL import crypto
 from lxml import etree
 from datetime import datetime
 from pytz import UTC
+from ..base import tira_formatacao
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -146,35 +147,27 @@ class Certificado(object):
             extensao = cert_openssl.get_extension(i)
             self._extensoes[extensao.get_short_name()] = extensao.get_data()
 
+        self._emissor = {}
+        for chave, valor in cert_openssl.get_issuer().get_components():
+            chave = chave.decode('utf-8')
+            valor = valor.decode('utf-8')
+            self._emissor[chave] = valor
+
+        self._proprietario = {}
+        for chave, valor in cert_openssl.get_subject().get_components():
+            chave = chave.decode('utf-8')
+            valor = valor.decode('utf-8')
+            self._proprietario[chave] = valor
+
         if sys.version_info.major == 3:
             self._data_inicio_validade = \
                 datetime.strptime(cert_openssl.get_notBefore().decode('utf-8'), '%Y%m%d%H%M%SZ')
             self._data_fim_validade    = \
                 datetime.strptime(cert_openssl.get_notAfter().decode('utf-8'), '%Y%m%d%H%M%SZ')
 
-            self._emissor = {}
-            for chave, valor in cert_openssl.get_issuer().get_components():
-                if type(chave) == bytes:
-                    chave = chave.decode('utf-8')
-
-                if type(valor) == bytes:
-                    valor = valor.decode('utf-8')
-
-                self._emissor[chave] = valor
-
-            self._proprietario = {}
-            for chave, valor in cert_openssl.get_subject().get_components():
-                if type(chave) == bytes:
-                    chave = chave.decode('utf-8')
-
-                if type(valor) == bytes:
-                    valor = valor.decode('utf-8')
-
-                self._proprietario[chave] = valor
-
         else:
-            self._emissor = dict(cert_openssl.get_issuer().get_components())
-            self._proprietario = dict(cert_openssl.get_subject().get_components())
+            #self._emissor = dict(cert_openssl.get_issuer().get_components())
+            #self._proprietario = dict(cert_openssl.get_subject().get_components())
             self._data_inicio_validade = \
                 datetime.strptime(cert_openssl.get_notBefore(), '%Y%m%d%H%M%SZ')
             self._data_fim_validade    = \
@@ -341,14 +334,6 @@ class Certificado(object):
             except IOError:  # arquivo do certificado não disponível
                 return dict()
 
-    def assina_arquivo(self, doc):
-        if sys.version_info.major == 2:
-            xml = open(doc, 'r').read().decode('utf-8')
-        else:
-            xml = open(doc, 'r', encoding='utf-8').read()
-        xml = self.assina_xml(xml)
-        return xml
-
     def _obtem_doctype(self, xml):
         """Obtém DOCTYPE do XML
 
@@ -384,12 +369,13 @@ class Certificado(object):
 
         return doctype
 
-    def _prepara_doc_xml(self, xml):
+    def _prepara_doc_xml(self, xml, doctype=''):
         if sys.version_info.major == 2:
             if isinstance(xml, str):
                 xml = unicode(xml.encode('utf-8'))
 
-        doctype = self._obtem_doctype(xml)
+        if not doctype:
+            doctype = self._obtem_doctype(xml)
 
         #
         # Importantíssimo colocar o encode, pois do contário não é possível
@@ -407,14 +393,15 @@ class Certificado(object):
 
         return xml
 
-    def _finaliza_xml(self, xml):
+    def _finaliza_xml(self, xml, doctype=''):
         if sys.version_info.major == 2:
             if isinstance(xml, str):
                 xml = unicode(xml.decode('utf-8'))
         else:
             xml = xml.decode('utf-8')
 
-        doctype = self._obtem_doctype(xml)
+        if not doctype:
+            doctype = self._obtem_doctype(xml)
 
         #
         # Remove o doctype e os \n
@@ -425,19 +412,47 @@ class Certificado(object):
 
         return xml
 
-    def assina_xml(self, xml):
-        xml = self._prepara_doc_xml(xml)
+    def assina_arquivo(self, doc, URI='', numero_assinatura=0, doctype='', atributo='Id', formatado=False):
+        if sys.version_info.major == 2:
+            xml = open(doc, 'r').read().decode('utf-8')
+        else:
+            xml = open(doc, 'r', encoding='utf-8').read()
+        xml = self.assina_xml(xml,
+                              URI=URI,
+                              numero_assinatura=numero_assinatura,
+                              doctype=doctype,
+                              atributo=atributo,
+                              formatado=formatado)
+        return xml
+
+    def assina_xml(self, xml, URI='', numero_assinatura=0, doctype='', atributo='Id', formatado=False):
+        if not formatado:
+            xml = tira_formatacao(xml)
+
+        xml = self._prepara_doc_xml(xml, doctype=doctype)
 
         #
         # Colocamos o texto no avaliador XML
         #
         doc_xml = etree.fromstring(xml.encode('utf-8'))
 
-        assinaturas = doc_xml.xpath('//sig:Signature', namespaces=NAMESPACES)
-        assinatura = assinaturas[0]
-        referencias = assinatura.xpath('//sig:Reference', namespaces=NAMESPACES)
-        referencia = referencias[0]
-        URI = referencia.attrib['URI']
+        if not URI:
+            assinaturas = doc_xml.xpath('//sig:Signature', namespaces=NAMESPACES)
+            assinatura = assinaturas[numero_assinatura]
+            referencias = assinatura.xpath('//sig:Reference', namespaces=NAMESPACES)
+            referencia = referencias[0]
+            URI = referencia.attrib['URI']
+            if URI and URI[0] == '#':
+                URI = URI[1:]
+
+        a_assinar = doc_xml.xpath("//*[@" + atributo + "='" + URI + "']")
+        a_assinar = a_assinar[0]
+        a_assinar = a_assinar.getparent()
+
+        assinaturas = a_assinar.xpath('//sig:Signature', namespaces=NAMESPACES)
+        for assinatura in assinaturas:
+            if assinatura.getparent() == a_assinar:
+                a_assinar.remove(assinatura)
 
         assinador = signxml.XMLSigner(
             method=signxml.methods.enveloped,
@@ -447,29 +462,34 @@ class Certificado(object):
         )
         assinador.namespaces = {None: assinador.namespaces['ds']}
 
-        doc_xml = assinador.sign(doc_xml, key=self.chave,
+        assinado = assinador.sign(a_assinar, key=self.chave,
                                  cert=self.certificado,
                                  reference_uri=URI)
+
+        if a_assinar.getparent() is not None:
+            a_assinar.getparent().replace(a_assinar, assinado)
+        else:
+            doc_xml = assinado
 
         #
         # Retransforma o documento xml em texto
         #
-        xml = etree.tostring(doc_xml)
+        xml = etree.tounicode(doc_xml)
 
-        xml = self._finaliza_xml(xml)
+        xml = self._finaliza_xml(xml, doctype=doctype)
 
         return xml
 
-    def verifica_assinatura_arquivo(self, doc):
+    def verifica_assinatura_arquivo(self, doc, numero_tag_assinatura=0, doctype=''):
         if sys.version_info.major == 2:
             xml = open(doc, 'r').read().decode('utf-8')
         else:
             xml = open(doc, 'r', encoding='utf-8').read()
 
-        return self.verifica_assinatura_xml(xml)
+        return self.verifica_assinatura_xml(xml, numero_tag_assinatura=0, doctype=doctype)
 
-    def verifica_assinatura_xml(self, xml):
-        xml = self._prepara_doc_xml(xml)
+    def verifica_assinatura_xml(self, xml, numero_tag_assinatura=0, doctype=''):
+        xml = self._prepara_doc_xml(xml, doctype=doctype)
 
         #
         # Colocamos o texto no avaliador XML
@@ -482,14 +502,14 @@ class Certificado(object):
         # pra poder validar corretamente a assinatura
         #
         assinatura = doc_xml.xpath('//sig:Signature', namespaces=NAMESPACES)
-        doc_xml = assinatura[0].getparent()
+        a_verificar = assinatura[numero_tag_assinatura].getparent()
 
         verificador = signxml.XMLVerifier()
 
         #
         # Separa o certificado da assinatura
         #
-        noh_certificado = verificador._findall(doc_xml, 'X509Certificate',
+        noh_certificado = verificador._findall(a_verificar, 'X509Certificate',
                                                anywhere=True)
 
         if not noh_certificado:
@@ -503,7 +523,7 @@ class Certificado(object):
         # Vai levantar exceção caso a assinatura seja inválida
         #
         verificador.verify(
-            doc_xml,
+            a_verificar,
             ca_pem_file=os.path.join(DIRNAME,'cadeia.pem'),
             x509_cert=self.cert_openssl,
         )

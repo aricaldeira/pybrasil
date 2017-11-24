@@ -12,8 +12,11 @@ import sys
 import locale
 
 if sys.version_info.major == 2:
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
     locale.setlocale(locale.LC_ALL, b'pt_BR.UTF-8')
     locale.setlocale(locale.LC_COLLATE, b'pt_BR.UTF-8')
+
 else:
     locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
     locale.setlocale(locale.LC_COLLATE, 'pt_BR.UTF-8')

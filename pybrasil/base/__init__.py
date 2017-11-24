@@ -44,6 +44,7 @@ from __future__ import (division, print_function, unicode_literals,
 
 from .modulo_11 import modulo11
 from .modulo_10 import modulo10
-from .tira_acentos import tira_acentos, somente_ascii, escape_xml, unescape_xml
+from .tira_acentos import tira_acentos, somente_ascii
 from .primeira_maiuscula import primeira_maiuscula
 from .mascara import mascara
+from .xml import tira_abertura, tira_namespaces, tira_formatacao, escape_xml, unescape_xml

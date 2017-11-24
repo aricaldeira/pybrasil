@@ -42,3 +42,4 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 from .certificado import Certificado
+from .assinatura import assinatura

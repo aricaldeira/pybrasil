@@ -42,29 +42,77 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
-import sys
-import unicodedata
+import re
 from lxml import etree
 
 
-def tira_acentos(texto):
-    texto = texto.replace('°', 'o')
-    if sys.version_info.major == 2:
-        return unicodedata.normalize(b'NFKD', texto).encode('ascii', 'ignore').encode('utf-8')
-    else:
-        return unicodedata.normalize('NFKD', texto).encode('ascii', 'ignore').decode('utf-8')
+def tira_abertura(texto):
+    if '?>' in texto:
+        texto = texto.split('?>')[1:]
+        texto = ''.join(texto)
+
+    return texto
 
 
-def somente_ascii(funcao):
-    '''
-    Usado como decorator
-    '''
-    def converter_para_ascii_puro(*args, **kwargs):
-        texto = funcao(*args, **kwargs)
-        texto = texto.replace('°', 'o')
-        if sys.version_info.major == 2:
-            return unicodedata.normalize(b'NFKD', texto).encode('ascii', 'ignore')
+def tira_namespaces(xml):
+    parser = etree.XMLParser(ns_clean=True, recover=True)
+    root = etree.fromstring(xml.encode('utf-8'), parser=parser)
+
+    for elem in root.iter():
+        if '{' in elem.tag:
+            parts = elem.tag.split('}')
         else:
-            return unicodedata.normalize('NFKD', texto).encode('ascii', 'ignore').decode('utf-8')
+            parts = elem.tag.split(':')
 
-    return converter_para_ascii_puro
+        if len(parts) > 1:
+            elem.tag = parts[-1]
+        entries = []
+
+        for attrib in elem.attrib:
+            if attrib.find(':') > -1:
+                entries.append(attrib)
+
+        for entry in entries:
+            del elem.attrib[entry]
+
+    return etree.tounicode(root, pretty_print=True)
+
+
+def tira_formatacao(xml):
+    parser = etree.XMLParser(remove_blank_text=True)
+    root = etree.fromstring(xml.encode('utf-8'), parser=parser)
+    return etree.tounicode(root)
+
+
+def escape_xml(texto, aspas=True):
+    if not texto:
+        return texto
+
+    texto = texto.replace('&', '&amp;')
+    texto = texto.replace('<', '&lt;')
+    texto = texto.replace('>', '&gt;')
+
+    if aspas:
+        texto = texto.replace('"', '&quot;')
+        texto = texto.replace("'", '&apos;')
+
+    return texto
+
+
+def unescape_xml(texto):
+    if not texto:
+        return texto
+
+    texto = texto.replace('&#39;', "'")
+    texto = texto.replace('&apos;', "'")
+    texto = texto.replace('&quot;', '"')
+    texto = texto.replace('&gt;', '>')
+    texto = texto.replace('&lt;', '<')
+    texto = texto.replace('&amp;', '&')
+    texto = texto.replace('&APOS;', "'")
+    texto = texto.replace('&QUOT;', '"')
+    texto = texto.replace('&GT;', '>')
+    texto = texto.replace('&LT;', '<')
+    texto = texto.replace('&AMP;', '&')
+
+    return texto
