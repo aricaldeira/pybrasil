@@ -60,7 +60,32 @@ def valida_ean(codigo):
     if len(codigo) not in (14, 13, 12, 8):
         return False
 
-    if modulo10(codigo[:-1], modulo=True) != codigo[-1]:
+    digito = codigo[-1]
+    codigo = codigo[:-1].zfill(13)
+
+    soma_pares = int(codigo[0]) + \
+                 int(codigo[2]) + \
+                 int(codigo[4]) + \
+                 int(codigo[6]) + \
+                 int(codigo[8]) + \
+                 int(codigo[10]) + \
+                 int(codigo[12])
+
+    soma_impares = int(codigo[1]) + \
+                   int(codigo[3]) + \
+                   int(codigo[5]) + \
+                   int(codigo[7]) + \
+                   int(codigo[9]) + \
+                   int(codigo[11])
+
+    total = (soma_pares * 3) + soma_impares
+
+    dv = total % 10
+
+    if dv != 0:
+        dv = 10 - dv
+
+    if str(dv) != digito:
         return False
 
     return True
