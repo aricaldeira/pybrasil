@@ -203,3 +203,67 @@ def horas_minutos_segundos_to_hora_decimal(horas, minutos, segundos):
 
 def horas_minutos_segundos_to_horario_decimal(horas, minutos, segundos):
     return D(horas) + (D(minutos) / 100) + (D(segundos) / 100 / 100)
+
+
+class FusoHorario(object):
+    def __init__(self, fuso_horario=HB):
+        self.fuso_horario = fuso_horario
+
+    @property
+    def fuso_horario(self):
+        return self._fuso_horario
+
+    @fuso_horario.setter
+    def fuso_horario(self, valor):
+        if isinstance(valor, tzinfo.tzinfo):
+            self._fuso_horario = valor
+        elif isinstance(valor, basestring):
+            try:
+                self.fuso_horario = timezone(valor)
+            except:
+                pass
+
+    def property_data_hora_getter(self, valor):
+        return self.fuso_horario.normalize(valor)
+
+    def property_data_hora_setter(self, valor):
+        if isinstance(valor, datetime.datetime):
+            if not valor.tzinfo:
+                valor = self.fuso_horario.localize(valor)
+
+            return UTC.normalize(valor)
+
+        elif isinstance(valor, datetime_sem_fuso):
+            valor = self.fuso_horario.localize(valor)
+            return property_data_hora_setter(valor)
+
+        elif isinstance(valor, basestring):
+            valor = parse_datetime(valor)
+            return property_data_hora_setter(valor)
+
+    def property_data_hora_formatada(self, valor):
+        return formata_data(valor, '%d/%m/%Y %H:%M:%S')
+
+    def property_data_hora_iso(self, valor):
+        return formata_data(valor, '%Y-%m-%dT%H:%M:%S')
+
+    def property_data_hora_iso_utc(self, valor):
+        return formata_data(valor, '%Y-%m-%dT%H:%M:%S%z')
+
+    def property_data_hora_data(self, valor):
+        return valor.date()
+
+    def property_data_hora_data_formatada(self, valor):
+        return formata_data(valor, '%d/%m/%Y')
+
+    def property_data_hora_data_iso(self, valor):
+        return formata_data(valor, '%Y-%m-%d')
+
+    def property_data_hora_hora(self, valor):
+        return valor.time()
+
+    def property_data_hora_hora_formatada(self, valor):
+        return formata_data(valor, '%H:%M:%S')
+
+    def property_data_hora_hora_iso(self, valor):
+        return formata_data(valor, '%H:%M:%S')

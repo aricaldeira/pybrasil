@@ -49,9 +49,10 @@ from .pais import (Pais, PAIS_BACEN, PAIS_NOME, PAIS_BRASIL, PAIS_ISO_3166_2, PA
 from .estado import (Estado, ESTADO_IBGE, ESTADO_SIGLA)
 from .municipio import (Municipio, MUNICIPIO_ESTADO_NOME, MUNICIPIO_IBGE, MUNICIPIO_SIAFI)
 from ..base import tira_acentos
+from ..data import FusoHorario
 
 
-class Local(object):
+class Local(FusoHorario):
     def __init__(self, **kwargs):
         self._pais = PAIS_BRASIL
         self._estado = Estado()
@@ -110,6 +111,7 @@ class Local(object):
             self._municipio = valor
             self.estado = self._municipio.estado
             self.pais = self._municipio.pais
+            self.fuso_horario = self.municipio.fuso_horario
 
         elif isinstance(valor, (list, tuple)) and len(valor) == 2:
             estado = str(valor[0]).upper()
@@ -118,6 +120,7 @@ class Local(object):
             if estado in MUNICIPIO_ESTADO_NOME:
                 if municipio in MUNICIPIO_ESTADO_NOME[estado]:
                     self.municipio = MUNICIPIO_ESTADO_NOME[estado][municipio]
+                    self.fuso_horario = self.municipio.fuso_horario
 
         elif isinstance(valor, basestring):
             if valor in MUNICIPIO_IBGE:
