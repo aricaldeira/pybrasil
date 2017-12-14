@@ -641,6 +641,12 @@ class Decimal(object):
         # From a string
         # REs insist on real strings, so we can too.
         if isinstance(value, str):
+            if '.' in value and ',' in value:
+                if value.find('.') < value.find(','):
+                    value = value.replace('.', '')
+                else:
+                    value = value.replace(',', '')
+
             m = _parser(value.strip().replace("_", "") or 0)
             if m is None:
                 if context is None:
@@ -6236,9 +6242,9 @@ _parser = re.compile(r"""        # A numeric string consists of:
 #    \s*
     (?P<sign>[-+])?              # an optional sign, followed by either...
     (
-        (?=\d|\.\d)              # ...a number (with at least one digit)
+        (?=\d|[\.,]\d)              # ...a number (with at least one digit)
         (?P<int>\d*)             # having a (possibly empty) integer part
-        (\.(?P<frac>\d*))?       # followed by an optional fractional part
+        ([\.,](?P<frac>\d*))?       # followed by an optional fractional part
         (E(?P<exp>[-+]?\d+))?    # followed by an optional exponent, or...
     |
         Inf(inity)?              # ...an infinity, or...
