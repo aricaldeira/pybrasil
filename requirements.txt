@@ -10,4 +10,4 @@ pyOpenSSL==17.4.0
 sh==1.12.14
 reportlab==3.4.0
 numpy==1.14.0
-email-validator=1.0.3
+email-validator==1.0.3
