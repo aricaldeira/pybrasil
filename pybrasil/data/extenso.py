@@ -98,6 +98,9 @@ def ano_romano(data=hoje()):
 def data_por_extenso(data=hoje(), numeros_por_extenso=False, legales=False):
     data = parse_datetime(data)
 
+    if data is None:
+        return ''
+
     if numeros_por_extenso:
         texto_data = ''
         if legales:
