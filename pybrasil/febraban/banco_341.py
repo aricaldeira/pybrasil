@@ -43,7 +43,7 @@ from __future__ import (division, print_function, unicode_literals,
 
 from builtins import str
 from pybrasil.valor.decimal import Decimal as D
-from pybrasil.data import parse_datetime
+from pybrasil.data import parse_datetime, formata_data
 from pybrasil.febraban.boleto import Boleto
 from datetime import date
 
@@ -109,7 +109,7 @@ def header_remessa_400(self, remessa):
     texto += beneficiario.nome.ljust(30)[:30]
     texto += '341'
     texto += 'BANCO ITAU SA'.ljust(15)
-    texto += remessa.data_hora.strftime(b'%d%m%y')
+    texto += formata_data(remessa.data_hora, '%d%m%y')
     texto += ''.ljust(294)
     texto += '1'.zfill(6)
 
