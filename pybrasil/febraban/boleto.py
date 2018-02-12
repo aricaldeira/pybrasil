@@ -452,8 +452,9 @@ def gera_pdf_boletos(lista_boletos, template_boleto=None):
 
     template = Template(template_boleto, arquivo_renderizado.name)
     template.render({'boletos': lista_boletos})
-    sh.libreoffice('--headless', '--invisible', '--convert-to', 'pdf',
-                   '--outdir', '/tmp', arquivo_renderizado.name)
+    lo = sh.libreoffice('--headless', '--invisible', '--convert-to', 'pdf',
+                   '--outdir', '/tmp', arquivo_renderizado.name, _bg=True)
+    lo.wait()
 
     pdf = open(arquivo_pdf, 'rb').read()
 
