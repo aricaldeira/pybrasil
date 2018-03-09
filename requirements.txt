@@ -11,3 +11,5 @@ sh==1.12.14
 reportlab==3.4.0
 numpy==1.14.0
 email-validator==1.0.3
+barcode==0.8.0
+qrcode==5.3
