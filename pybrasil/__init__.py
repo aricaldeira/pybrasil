@@ -5,7 +5,7 @@ from __future__ import (division, print_function, unicode_literals,
 
 
 from . import (base, data, ibge, inscricao, ncm, telefone, valor, template,
-               febraban, certificado)
+               febraban, certificado, codigo_barras)
 from .python_pt_BR import python_pt_BR
 
 import sys
