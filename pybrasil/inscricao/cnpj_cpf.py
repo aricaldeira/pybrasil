@@ -65,7 +65,7 @@ def eh_tudo_igual(valor):
     return tudo_igual
 
 
-def valida_cpf(cpf):
+def valida_cpf(cpf, mostra_correto=False):
     u'''Verifica que o CPF seja válido de acordo com os dígitos verificadores
     '''
     cpf = limpa_formatacao(cpf)
@@ -82,13 +82,19 @@ def valida_cpf(cpf):
     digito = cpf[-2:]
 
     d1 = modulo11(cpf[:9], pesos=range(2, 11))
+
+    if mostra_correto:
+        d2 = modulo11(cpf[:9] + d1, pesos=range(2, 12))
+        digitocalc = d1 + d2
+        return digitocalc
+
     d2 = modulo11(cpf[:10], pesos=range(2, 12))
     digitocalc = d1 + d2
 
     return digito == digitocalc
 
 
-def valida_cnpj(cnpj):
+def valida_cnpj(cnpj, mostra_correto=False):
     u'''Verifica que o CNPJ seja válido de acordo com os dígitos verificadores
     '''
     cnpj = limpa_formatacao(cnpj)
@@ -105,6 +111,12 @@ def valida_cnpj(cnpj):
     digito = cnpj[-2:]
 
     d1 = modulo11(cnpj[:12])
+
+    if mostra_correto:
+        d2 = modulo11(cnpj[:12] + d1)
+        digitocalc = d1 + d2
+        return digitocalc
+
     d2 = modulo11(cnpj[:13])
     digitocalc = d1 + d2
 
