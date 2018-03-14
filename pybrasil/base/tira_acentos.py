@@ -68,3 +68,8 @@ def somente_ascii(funcao):
             return unicodedata.normalize('NFKD', texto).encode('ascii', 'ignore').decode('utf-8')
 
     return converter_para_ascii_puro
+
+
+@somente_ascii
+def tira_acentos_ascii(texto):
+    return tira_acentos(texto)

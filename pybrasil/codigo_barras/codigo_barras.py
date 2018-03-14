@@ -49,7 +49,7 @@ import qrcode.image.svg
 import barcode
 from barcode.writer import ImageWriter
 
-from ..base import somente_ascii
+from ..base.tira_acentos import tira_acentos_ascii
 
 
 def qrcode_png(texto):
@@ -94,7 +94,7 @@ def code128_png(texto):
     if not texto:
         return ''
 
-    texto = somente_ascii(texto)
+    texto = tira_acentos_ascii(texto)
 
     arq = BytesIO()
     barcode.generate('Code128', texto, writer=ImageWriter(), output=arq, writer_options={'write_text': False})
@@ -114,7 +114,7 @@ def code128_svg(texto):
     if not texto:
         return ''
 
-    texto = somente_ascii(texto)
+    texto = tira_acentos_ascii(texto)
 
     arq = BytesIO()
     barcode.generate('Code128', texto, output=arq, writer_options={'write_text': False})
