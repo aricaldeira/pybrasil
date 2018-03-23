@@ -46,6 +46,7 @@ import sys
 import os
 import base64
 import signxml
+import tempfile
 from OpenSSL import crypto
 from lxml import etree
 from datetime import datetime
@@ -84,6 +85,9 @@ class Certificado(object):
         self._extensoes = {}
         self._doc_xml    = None
         self._certificado_preparado = False
+        self._arquivo_certificado = None
+        self._arquivo_chave = None
+        self._arquivo_cadeia = None
 
     def prepara_certificado_arquivo_pfx(self):
         if self._certificado_preparado:
@@ -96,12 +100,10 @@ class Certificado(object):
         pkcs12 = crypto.load_pkcs12(self.stream_certificado, self.senha)
 
         # Retorna a string decodificada da chave privada
-        self.chave = crypto.dump_privatekey(crypto.FILETYPE_PEM,
-                                            pkcs12.get_privatekey())
+        self.chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
 
         # Retorna a string decodificada do certificado
-        certificado = crypto.dump_certificate(crypto.FILETYPE_PEM,
-                                              pkcs12.get_certificate())
+        certificado = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate())
 
         if sys.version_info.major == 3:
             certificado = certificado.decode('utf-8')
@@ -340,7 +342,7 @@ class Certificado(object):
         Determina o tipo de arquivo que vai ser assinado, procurando pela tag
         correspondente.
         """
-        doctype = None
+        doctype = ''
 
         #
         # XML da NF-e
@@ -364,18 +366,12 @@ class Certificado(object):
         elif '</inutCTe>' in xml:
             doctype = '<!DOCTYPE inutCTe [<!ATTLIST infInut Id ID #IMPLIED>]>'
 
-        else:
-            raise ValueError('Tipo de arquivo desconhecido para assinatura/validação')
-
         return doctype
 
     def _prepara_doc_xml(self, xml, doctype=''):
         if sys.version_info.major == 2:
             if isinstance(xml, str):
                 xml = unicode(xml.encode('utf-8'))
-
-        if not doctype:
-            doctype = self._obtem_doctype(xml)
 
         #
         # Importantíssimo colocar o encode, pois do contário não é possível
@@ -397,8 +393,6 @@ class Certificado(object):
         if sys.version_info.major == 2:
             if isinstance(xml, str):
                 xml = unicode(xml.decode('utf-8'))
-        else:
-            xml = xml.decode('utf-8')
 
         if not doctype:
             doctype = self._obtem_doctype(xml)
@@ -412,47 +406,60 @@ class Certificado(object):
 
         return xml
 
-    def assina_arquivo(self, doc, URI='', numero_assinatura=0, doctype='', atributo='Id', formatado=False):
+    def assina_arquivo(self, doc, URI='', numero_assinatura=0, doctype='', atributo='Id', tag='', namespaces={},
+                       formatado=False, correcoes_antes={}, correcoes_depois={}):
         if sys.version_info.major == 2:
             xml = open(doc, 'r').read().decode('utf-8')
         else:
             xml = open(doc, 'r', encoding='utf-8').read()
+
         xml = self.assina_xml(xml,
                               URI=URI,
                               numero_assinatura=numero_assinatura,
                               doctype=doctype,
                               atributo=atributo,
+                              tag=tag,
+                              namespaces=namespaces,
                               formatado=formatado)
         return xml
 
-    def assina_xml(self, xml, URI='', numero_assinatura=0, doctype='', atributo='Id', formatado=False):
+    def assina_xml(self, xml, URI='', numero_assinatura=0, doctype='', atributo='Id', tag='', namespaces={},
+                   formatado=False):
         if not formatado:
             xml = tira_formatacao(xml)
 
         xml = self._prepara_doc_xml(xml, doctype=doctype)
+
+        if 'None' in namespaces:
+            namespaces[None] = namespaces['None']
 
         #
         # Colocamos o texto no avaliador XML
         #
         doc_xml = etree.fromstring(xml.encode('utf-8'))
 
-        if not URI:
-            assinaturas = doc_xml.xpath('//sig:Signature', namespaces=NAMESPACES)
-            assinatura = assinaturas[numero_assinatura]
-            referencias = assinatura.xpath('//sig:Reference', namespaces=NAMESPACES)
-            referencia = referencias[0]
-            URI = referencia.attrib['URI']
-            if URI and URI[0] == '#':
-                URI = URI[1:]
+        #if not URI:
+            #assinaturas = doc_xml.xpath('//sig:Signature', namespaces=NAMESPACES)
+            #assinatura = assinaturas[numero_assinatura]
+            #referencias = assinatura.xpath('//sig:Reference', namespaces=NAMESPACES)
+            #referencia = referencias[0]
+            #URI = referencia.attrib['URI']
+            #if URI and URI[0] == '#':
+                #URI = URI[1:]
 
-        a_assinar = doc_xml.xpath("//*[@" + atributo + "='" + URI + "']")
-        a_assinar = a_assinar[0]
-        a_assinar = a_assinar.getparent()
+        if URI:
+            a_assinar = doc_xml.xpath("//*[@" + atributo + "='" + URI + "']")
+            a_assinar = a_assinar[0]
+            a_assinar = a_assinar.getparent()
+        elif tag:
+            a_assinar = doc_xml.xpath("//" + tag, namespaces=namespaces)
+            a_assinar = a_assinar[0]
+            a_assinar = a_assinar.getparent()
 
-        assinaturas = a_assinar.xpath('//sig:Signature', namespaces=NAMESPACES)
-        for assinatura in assinaturas:
-            if assinatura.getparent() == a_assinar:
-                a_assinar.remove(assinatura)
+        #assinaturas = a_assinar.xpath('//sig:Signature', namespaces=NAMESPACES)
+        #for assinatura in assinaturas:
+            #if assinatura.getparent() == a_assinar:
+                #a_assinar.remove(assinatura)
 
         assinador = signxml.XMLSigner(
             method=signxml.methods.enveloped,
@@ -462,9 +469,10 @@ class Certificado(object):
         )
         assinador.namespaces = {None: assinador.namespaces['ds']}
 
-        assinado = assinador.sign(a_assinar, key=self.chave,
-                                 cert=self.certificado,
-                                 reference_uri=URI)
+        if URI:
+            assinado = assinador.sign(a_assinar, key=self.chave, cert=self.certificado, reference_uri=URI)
+        else:
+            assinado = assinador.sign(a_assinar, key=self.chave, cert=self.certificado)
 
         if a_assinar.getparent() is not None:
             a_assinar.getparent().replace(a_assinar, assinado)
@@ -538,7 +546,9 @@ class Certificado(object):
 
         assinatura = crypto.sign(pkcs12.get_privatekey(), texto, 'sha1')
 
-        return base64.encode(assinatura)
+        assinatura = base64.encodestring(assinatura)
+
+        return assinatura.decode('utf-8')
 
     def verifica_assinatura_texto(self, texto, assinatura):
         #
@@ -552,3 +562,57 @@ class Certificado(object):
             return False
 
         return True
+
+    def exclui_arquivo_conexao(self):
+        if self._arquivo_certificado is not None:
+            os.remove(self._arquivo_certificado.name)
+            self._arquivo_certificado = None
+
+        if self._arquivo_chave is not None:
+            os.remove(self._arquivo_chave.name)
+            self._arquivo_chave = None
+
+        if self._arquivo_cadeia is not None:
+            os.remove(self._arquivo_cadeia.name)
+            self._arquivo_cadeia = None
+
+    def salva_arquivo_conexao(self, inclui_cadeia=False):
+        self.exclui_arquivo_conexao()
+
+        self._arquivo_certificado = tempfile.NamedTemporaryFile(delete=False)
+        self._arquivo_chave = tempfile.NamedTemporaryFile(delete=False)
+
+        self._arquivo_certificado.file.write(self.certificado.encode('utf-8'))
+        self._arquivo_certificado.file.close()
+
+        self._arquivo_chave.file.write(self.chave)
+        self._arquivo_chave.file.close()
+
+        if inclui_cadeia:
+            self._arquivo_cadeia = tempfile.NamedTemporaryFile(delete=False)
+
+            self._arquivo_cadeia.file.write(self.certificado.encode('utf-8'))
+            for cert_ca in self.certificado_ca:
+                self._arquivo_cadeia.file.write(cert_ca.encode('utf-8'))
+            self._arquivo_cadeia.file.close()
+
+    @property
+    def arquivo_certificado_conexao(self):
+        if self._arquivo_certificado is None:
+            return ''
+
+        return self._arquivo_certificado.name
+
+    @property
+    def arquivo_chave_conexao(self):
+        if self._arquivo_chave is None:
+            return ''
+
+        return self._arquivo_chave.name
+
+    @property
+    def arquivo_cadeia_conexao(self):
+        if self._arquivo_cadeia is None:
+            return ''
+
+        return self._arquivo_cadeia.name

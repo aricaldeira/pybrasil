@@ -44,6 +44,7 @@ from __future__ import (division, print_function, unicode_literals,
 
 import re
 from lxml import etree, objectify
+from io import BytesIO
 
 
 def tira_abertura(texto):
@@ -130,5 +131,11 @@ def unescape_xml(texto):
     return texto
 
 
-def gera_objeto(texto):
-    return objectify.parse(texto)
+def gera_objeto_xml(texto):
+    #if '<' in arquivo:
+        #arq = BytesIO()
+        #arq.write(arquivo.encode('utf-8'))
+        #arq.seek(0)
+        #return objectify.parse(arq)
+
+    return objectify.fromstring(texto)
