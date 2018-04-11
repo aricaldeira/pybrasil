@@ -6,6 +6,7 @@ setup(
         'pybrasil',
         'pybrasil.base',
         'pybrasil.certificado',
+        'pybrasil.codigo_barras',
         'pybrasil.data',
         'pybrasil.febraban',
         'pybrasil.feriado',
