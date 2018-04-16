@@ -42,4 +42,4 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
-from .template import TemplateBrasil
+from .template import TemplateBrasil, aplica_template
