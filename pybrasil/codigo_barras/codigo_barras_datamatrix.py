@@ -42,7 +42,45 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
-from .codigo_barras_qrcode import qrcode_png, qrcode_png_base64, qrcode_svg, qrcode_svg_base64
-from .codigo_barras_code128 import code128_png, code128_png_base64, code128_svg, code128_svg_base64
-from .codigo_barras_ean import ean_png, ean_png_base64, ean_svg, ean_svg_base64
-from .codigo_barras_datamatrix import datamatrix_png, datamatrix_png_base64
+import base64
+from io import BytesIO
+from .datamatrix import DataMatrixEncoder
+#import qrcode.image.svg
+
+from ..base.tira_acentos import tira_acentos_ascii
+
+
+def datamatrix_png(texto):
+    if not texto:
+        return ''
+
+    imagem = DataMatrixEncoder(texto).get_imagedata()
+    return imagem
+
+
+def datamatrix_png_base64(texto):
+    if not texto:
+        return
+
+    imagem = datamatrix_png(texto)
+
+    return base64.b64encode(imagem).decode('utf-8')
+
+
+#def datamatrix_svg(texto):
+    #if not texto:
+        #return ''
+
+    #imagem = qrcode.make(texto, image_factory=qrcode.image.svg.SvgImage)
+    #arq = BytesIO()
+    #imagem.save(arq)
+    #return arq.getvalue()
+
+
+#def datamatrix_svg_base64(texto):
+    #if not texto:
+        #return ''
+
+    #imagem = datamatrix_svg(texto)
+
+    #return base64.b64encode(imagem).decode('utf-8')

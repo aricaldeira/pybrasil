@@ -42,7 +42,47 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
-from .codigo_barras_qrcode import qrcode_png, qrcode_png_base64, qrcode_svg, qrcode_svg_base64
-from .codigo_barras_code128 import code128_png, code128_png_base64, code128_svg, code128_svg_base64
-from .codigo_barras_ean import ean_png, ean_png_base64, ean_svg, ean_svg_base64
-from .codigo_barras_datamatrix import datamatrix_png, datamatrix_png_base64
+import base64
+from io import BytesIO
+import qrcode
+import qrcode.image.svg
+import barcode
+from barcode.writer import ImageWriter
+
+from ..base.tira_acentos import tira_acentos_ascii
+
+
+def ean_png(texto):
+    if not texto:
+        return ''
+
+    arq = BytesIO()
+    barcode.generate('EAN', texto, writer=ImageWriter(), output=arq, writer_options={'write_text': False})
+    return arq.getvalue()
+
+
+def ean_png_base64(texto):
+    if not texto:
+        return ''
+
+    imagem = ean_png(texto)
+
+    return base64.b64encode(imagem).decode('utf-8')
+
+
+def ean_svg(texto):
+    if not texto:
+        return ''
+
+    arq = BytesIO()
+    barcode.generate('EAN', texto, output=arq, writer_options={'write_text': False})
+    return arq.getvalue()
+
+
+def ean_svg_base64(texto):
+    if not texto:
+        return ''
+
+    imagem = ean_svg(texto)
+
+    return base64.b64encode(imagem).decode('utf-8')
