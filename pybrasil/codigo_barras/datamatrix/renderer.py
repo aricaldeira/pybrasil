@@ -21,7 +21,7 @@ class DataMatrixRenderer:
         self.height = len(matrix[0])
         self.regions = regions
         self.region_size = self.width//regions
-        self.quiet_zone = 2
+        self.quiet_zone = 0
 
         self.matrix = matrix
 
@@ -163,7 +163,7 @@ class DataMatrixRenderer:
         dxf.append("9\n$INSUNITS\n70\n")
         dxf.append("4\n" if units == "mm" else "0\n")
         dxf.append("0\nENDSEC\n0\nSECTION\n2\nENTITIES\n")
-        
+
         def coord(x,y,c):
             # Group codes 10,11,12,13 are X1,X2,X3,X4 coordinates
             # Group codes 20,21,22,23 are Y1,Y2,Y3,Y4 coordinates
