@@ -43,9 +43,10 @@ from __future__ import (division, print_function, unicode_literals,
 
 import os
 import base64
+import json
 from io import BytesIO
 from datetime import date
-from ..base import modulo11, modulo10, tira_acentos
+from ..base import modulo11, modulo10, tira_acentos, DicionarioObjeto
 
 CURDIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -62,24 +63,35 @@ class Banco(object):
             self.logo = None
             self.arquivo_logo = ''
 
-        self.arquivo_template_boleto = os.path.join(CURDIR,
-            'template_boleto', codigo + '.odt')
-        self.arquivo_template_boleto_geral = os.path.join(CURDIR,
-            'template_boleto', 'boleto.odt')
+        self.template_boleto = None
+        self.arquivo_template_boleto = ''
+
+        self.arquivo_template_boleto_geral = os.path.join(CURDIR, 'template_boleto', 'boleto.odt')
+        self.arquivo_template_boleto = os.path.join(CURDIR, 'template_boleto', 'banco_' + codigo + '.odt')
 
         if os.path.exists(self.arquivo_template_boleto):
             self.template_boleto = BytesIO()
-            self.template_boleto.write(
-                open(self.arquivo_template_boleto, 'rb').read())
+            self.template_boleto.write(open(self.arquivo_template_boleto, 'rb').read())
             self.template_boleto.seek(0)
         elif os.path.exists(self.arquivo_template_boleto_geral):
             self.template_boleto = BytesIO()
-            self.template_boleto.write(open(
-                self.arquivo_template_boleto_geral, 'rb').read())
+            self.template_boleto.write(open(self.arquivo_template_boleto_geral, 'rb').read())
             self.template_boleto.seek(0)
+
+        self.arquivo_template_json = os.path.join(CURDIR, 'template_json', 'banco_' + codigo + '.json')
+
+        if os.path.exists(self.arquivo_template_json):
+            self.template_json = open(self.arquivo_template_json, 'rb').read().decode('utf-8')
+            self.template_json = self.template_json.replace('\n    ', '\n   ').replace('": "', '":"')
         else:
-            self.template_boleto = None
-            self.arquivo_template_boleto = ''
+            self.template_json = ''
+
+        self.arquivo_configuracao_json = os.path.join(CURDIR, 'template_json', 'banco_' + codigo + '_configuracao.json')
+
+        if os.path.exists(self.arquivo_configuracao_json):
+            self.configuracao_json = DicionarioObjeto(json.load(open(self.arquivo_configuracao_json)))
+        else:
+            self.template_json = ''
 
         self.carteira = ''
         self.modalidade = ''

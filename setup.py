@@ -19,6 +19,7 @@ setup(
         'pybrasil.telefone',
         'pybrasil.template',
         'pybrasil.valor',
+        'pybrasil.webservice',
     ],
     url='git@github.com:aricaldeira/pybrasil.git',
     license='',

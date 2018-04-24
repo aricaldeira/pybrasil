@@ -110,6 +110,12 @@ class Certificado(object):
 
         self.prepara_certificado_txt(certificado)
 
+        self.certificado_ca = []
+        if pkcs12.get_ca_certificates() is not None:
+            for cert_ca in pkcs12.get_ca_certificates():
+                self.certificado_ca.append(
+                    self._prepara_certificado_formato_cer(crypto.dump_certificate(crypto.FILETYPE_PEM, cert_ca)))
+
         self._certificado_preparado = True
 
     def prepara_certificado_arquivo_pem(self):
@@ -123,11 +129,14 @@ class Certificado(object):
 
         self._certificado_preparado = True
 
-    def prepara_certificado_txt(self, cert_txt):
+    def _prepara_certificado_formato_cer(self, cert_txt):
         #
         # Para dar certo a leitura pelo xmlsec, temos que separar o certificado
         # em linhas de 64 caracteres de extensão...
         #
+        if isinstance(cert_txt, bytes):
+            cert_txt = cert_txt.decode('utf-8')
+
         cert_txt = cert_txt.replace('\n', '')
         cert_txt = cert_txt.replace('-----BEGIN CERTIFICATE-----', '')
         cert_txt = cert_txt.replace('-----END CERTIFICATE-----', '')
@@ -136,8 +145,10 @@ class Certificado(object):
         for i in range(0, len(cert_txt), 64):
             linhas_certificado.append(cert_txt[i:i+64] + '\n')
         linhas_certificado.append('-----END CERTIFICATE-----\n')
+        return ''.join(linhas_certificado)
 
-        self.certificado = ''.join(linhas_certificado)
+    def prepara_certificado_txt(self, cert_txt):
+        self.certificado = self._prepara_certificado_formato_cer(cert_txt)
 
         cert_openssl = crypto.load_certificate(crypto.FILETYPE_PEM,
                                                self.certificado)
@@ -538,26 +549,57 @@ class Certificado(object):
 
         return True
 
-    def assina_texto(self, texto):
+    def assina_texto(self, texto, tipo_hash='sha1', formato='pkcs12'):
         #
         # Carrega o arquivo do certificado
         #
         pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
 
-        assinatura = crypto.sign(pkcs12.get_privatekey(), texto, 'sha1')
+        if formato == 'pkcs12':
+            assinatura = crypto.sign(pkcs12.get_privatekey(), texto, tipo_hash)
+
+        elif formato == 'pkcs7':
+            cert = pkcs12.get_certificate()
+            pkey = pkcs12.get_privatekey()
+
+            entrada = crypto._new_mem_buf(texto.encode('utf-8'))
+
+            PKCS7_TEXT            = 0x1
+            PKCS7_NOCERTS         = 0x2
+            PKCS7_NOSIGS          = 0x4
+            PKCS7_NOCHAIN         = 0x8
+            PKCS7_NOINTERN        = 0x10
+            PKCS7_NOVERIFY        = 0x20
+            PKCS7_DETACHED        = 0x40
+            PKCS7_BINARY          = 0x80
+            PKCS7_NOATTR          = 0x100
+            PKCS7_NOSMIMECAP      = 0x200
+            PKCS7_NOOLDMIMETYPE   = 0x400
+            PKCS7_CRLFEOL         = 0x800
+            PKCS7_STREAM          = 0x1000
+            PKCS7_NOCRL           = 0x2000
+            PKCS7_PARTIAL         = 0x4000
+            PKCS7_REUSE_DIGEST    = 0x8000
+            PKCS7_NO_DUAL_CONTENT = 0x10000
+
+            pkcs7 = crypto._lib.PKCS7_sign(cert._x509, pkey._pkey, crypto._ffi.NULL, entrada, 0)
+            saida = crypto._new_mem_buf()
+            crypto._lib.i2d_PKCS7_bio(saida, pkcs7)
+            assinatura = crypto._bio_to_string(saida)
+            #assinatura = assinatura.replace(b'text/plain', b'application/json')
+            import ipdb; ipdb.set_trace();
 
         assinatura = base64.encodestring(assinatura)
-
         return assinatura.decode('utf-8')
 
-    def verifica_assinatura_texto(self, texto, assinatura):
+    def verifica_assinatura_texto(self, texto, assinatura, tipo_hash='sha1'):
         #
         # Carrega o arquivo do certificado
         #
         pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
 
         try:
-            crypto.verify(pkcs12.get_certificate(), assinatura, texto, 'sha1')
+            crypto.verify(pkcs12.get_certificate(), assinatura, texto, tipo_hash)
         except:
             return False
 

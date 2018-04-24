@@ -151,8 +151,7 @@ def linha_remessa_400(self, remessa, boleto):
 
     if boleto.valor_multa > 0:
         texto += '2'
-        percentual_multa = D(str(boleto.valor_multa)) / D(str(boleto.documento.valor)) * D('100')
-        texto += str(int(percentual_multa * 100)).zfill(4)
+        texto += str(int(boleto.percentual_multa * 100)).zfill(4)
     else:
         texto += '0'
         texto += '0000'

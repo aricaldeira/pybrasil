@@ -48,6 +48,7 @@ import tempfile
 import sh
 from genshi.core import Markup
 import os
+import json
 from py3o.template import Template
 from reportlab.graphics.barcode import createBarcodeDrawing
 from reportlab.lib.units import cm, mm
@@ -55,10 +56,12 @@ from reportlab.lib.units import cm, mm
 from datetime import date, datetime
 from ..base import modulo10
 from ..valor import formata_valor
+from ..valor.decimal import Decimal
 from ..data import parse_datetime, formata_data
 from .pessoa import Beneficiario, Pagador
 from .banco import Banco
 from .codigo_barras import monta_linha_digitavel_boleto
+from ..template import aplica_template
 
 
 class Documento(object):
@@ -432,6 +435,20 @@ class Boleto(object):
     @property
     def pdf(self):
         return gera_pdf_boletos([self])
+
+    @property
+    def json(self):
+        dados = {
+            'boleto': self,
+            'banco': self.banco,
+            'beneficiario': self.beneficiario,
+            'pagador': self.pagador,
+            'sacador': self.sacador,
+            'documento': self.documento,
+        }
+        dados_json = aplica_template(self.banco.template_json, dados)
+        dados_json = json.loads(dados_json)
+        return json.dumps(dados_json)
 
 
 def gera_pdf_boletos(lista_boletos, template_boleto=None):

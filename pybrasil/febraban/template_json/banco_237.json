@@ -1,0 +1,101 @@
+{
+    "nuCPFCNPJ": "${ beneficiario.cnpj_cpf_numero.zfill(15)[0:9] }",
+    "filialCPFCNPJ": "${ beneficiario.cnpj_cpf_numero.zfill(15)[9:13] }",
+    "ctrlCPFCNPJ": "${ beneficiario.cnpj_cpf_numero.zfill(15)[13:] }",
+    "cdTipoAcesso": "2",
+    "clubBanco": "0",
+    "cdTipoContrato": "0",
+    "nuSequenciaContrato": "0",
+    "idProduto": "${ banco.carteira }",
+    "nuNegociacao": "${ beneficiario.agencia.numero.zfill(4)[:4] + ''.zfill(7) + beneficiario.conta.numero.zfill(7)[:7] }",
+    "cdBanco": "237",
+    "eNuSequenciaContrato": "0",
+    "tpRegistro": "1",
+    "cdProduto": "0",
+    "nuTitulo": "${ str(boleto.nosso_numero) }",
+    "nuCliente": "${ str(documento.numero)[:10] }",
+    "dtEmissaoTitulo": "${ formata_data(boleto.data_processamento, '%d.%m.%Y') }",
+    "dtVencimentoTitulo": "${ formata_data(boleto.data_vencimento, '%d.%m.%Y') }",
+    "tpVencimento": "0",
+    "vlNominalTitulo": "${ str(int(documento.valor * 100)) }",
+    "cdEspecieTitulo": "99",
+##
+## Caso haja dias para protesto
+##
+% if boleto.dias_protesto:
+    "tpProtestoAutomaticoNegativacao": "01",
+    "prazoProtestoAutomaticoNegativacao": "${ str(boleto.dias_protesto).zfill(2) }",
+% else:
+    "tpProtestoAutomaticoNegativacao": "0",
+    "prazoProtestoAutomaticoNegativacao": "0",
+% endif
+    "controleParticipante": "${ str(boleto.identificacao)[:25] }",
+    "cdPagamentoParcial": "N",
+    "qtdePagamentoParcial": "0",
+    "percentualJuros": "${ str(int(boleto.percentual_juros * 100000)).zfill(8)[:8] }",
+    "vlJuros": "${ str(int(boleto.valor_juros * 100)) }",
+    "qtdeDiasJuros": "0",
+    "percentualMulta": "${ str(int(boleto.percentual_multa * 100000)).zfill(8)[:8] }",
+    "vlMulta": "${ str(int(boleto.valor_multa * 100)) }",
+    "qtdeDiasMulta": "0",
+    "percentualDesconto1": "0",
+    "vlDesconto1": "0",
+    "dataLimiteDesconto1": "",
+    "percentualDesconto2": "0",
+    "vlDesconto2": "0",
+    "dataLimiteDesconto2": "",
+    "percentualDesconto3": "0",
+    "vlDesconto3": "0",
+    "dataLimiteDesconto3": "",
+    "prazoBonificacao": "0",
+    "percentualBonificacao": "0",
+    "vlBonificacao": "0",
+    "dtLimiteBonificacao": "",
+    "vlAbatimento": "0",
+    "vlIOF": "${ str(int(boleto.valor_iof * 100)) }",
+##
+## Dados do pagador/cliente
+##
+    "nomePagador": "${ pagador.nome }",
+    "logradouroPagador": "${ pagador.endereco[:40] }",
+    "nuLogradouroPagador": "${ pagador.numero[:10] }",
+    "complementoLogradouroPagador": "${ pagador.complemento[:15] }",
+    "cepPagador": "${ pagador.cep[:5] }",
+    "complementoCepPagador": "${ pagador.cep[-3:] }",
+    "bairroPagador": "${ pagador.bairro[:40] }",
+    "municipioPagador": "${ pagador.cidade[:30] }",
+    "ufPagador": "${ pagador.estado }",
+    "cdIndCpfcnpjPagador": "${ '1' if pagador.tipo_pessoa == 'PF' else '2' }",
+    "nuCpfcnpjPagador": "${ pagador.cnpj_cpf_numero.zfill(14) }",
+    "endEletronicoPagador": "${ pagador.email or '' }",
+##
+## Dados do sacador/avalista
+##
+% if sacador.cnpj_cpf:
+    "nomeSacadorAvalista": "${ sacador.nome }",
+    "logradouroSacadorAvalista": "${ sacador.endereco[:40] }",
+    "nuLogradouroSacadorAvalista": "${ sacador.numero[:10] }",
+    "complementoLogradouroSacadorAvalista": "${ sacador.complemento[:15] }",
+    "cepSacadorAvalista": "${ sacador.cep[:5] }",
+    "complementoCepSacadorAvalista": "${ sacador.cep[-3:] }",
+    "bairroSacadorAvalista": "${ sacador.bairro[:40] }",
+    "municipioSacadorAvalista": "${ sacador.cidade[:30] }",
+    "ufSacadorAvalista": "${ sacador.estado }",
+    "cdIndCpfcnpjSacadorAvalista": "${ '1' if sacador.tipo_pessoa == 'PF' else '2' }",
+    "nuCpfcnpjSacadorAvalista": "${ sacador.cnpj_cpf_numero.zfill(14) }",
+    "endEletronicoSacadorAvalista": "${ sacador.email or '' }"
+% else:
+    "nomeSacadorAvalista": "",
+    "logradouroSacadorAvalista": "",
+    "nuLogradouroSacadorAvalista": "",
+    "complementoLogradouroSacadorAvalista": "",
+    "cepSacadorAvalista": "0",
+    "complementoCepSacadorAvalista": "0",
+    "bairroSacadorAvalista": "",
+    "municipioSacadorAvalista": "",
+    "ufSacadorAvalista": "",
+    "cdIndCpfcnpjSacadorAvalista": "0",
+    "nuCpfcnpjSacadorAvalista": "0",
+    "endEletronicoSacadorAvalista": ""
+% endif
+}

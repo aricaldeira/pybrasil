@@ -165,6 +165,13 @@ def _monta_lista_feriados():
 
     for linha in arquivo:
         linha = linha.replace('\n', '').replace('\r', '')
+
+        if len(linha) == 0:
+            continue
+
+        if linha[0] == '#':
+            continue
+
         campos = linha.split('|')
         nome, tipo, abrangencia, estado, municipio_ibge, municipio_nome, quando, dia, dia_da_semana, mes, ano, dias_de_diferenca, ajuste = campos
 
