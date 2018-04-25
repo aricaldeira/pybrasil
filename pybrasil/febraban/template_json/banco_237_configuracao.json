@@ -3,16 +3,33 @@
         "conexao": {
             "servidor": "cobranca.bradesconetempresa.b.br",
             "porta": 443,
-            "url": "/ibpjregistrotitulows/registrotitulohomologacao",
+            "url": "ibpjregistrotitulows/registrotitulohomologacao",
             "metodo": "",
             "header": {
-                "Content-Type": "application/json; charset=utf-8"
+                "Content-Type": "application/json"
             },
             "forca_tls": false,
             "forca_http": false,
-            "forca_cadeia_conexao": true,
+            "forca_cadeia_conexao": false,
             "sem_certificado": false
         },
-        "assina": true
+        "assina": true,
+        "assinatura": {
+            "URI": "",
+            "atributo": "",
+            "tag": "",
+            "namespaces": {
+                "ns2": "http://ws.registrotitulo.ibpj.web.bradesco.com.br/",
+                "soapenv": "http://schemas.xmlsoap.org/soap/envelope/"
+            }
+         },
+        "escapa_envio": false,
+        "escapa_resposta": false,
+        "resposta_xml": true,
+        "tag_retorno": "return",
+        "retorno_json": "true",
+        "tag_erro": "",
+        "tag_erro_codigo": "cdErro",
+        "tag_erro_descricao": "msgErro"
     }
 }

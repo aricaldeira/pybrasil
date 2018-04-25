@@ -47,6 +47,7 @@ import os
 import base64
 import signxml
 import tempfile
+import M2Crypto
 from OpenSSL import crypto
 from lxml import etree
 from datetime import datetime
@@ -557,39 +558,23 @@ class Certificado(object):
 
         if formato == 'pkcs12':
             assinatura = crypto.sign(pkcs12.get_privatekey(), texto, tipo_hash)
+            assinatura = base64.encodestring(assinatura)
 
         elif formato == 'pkcs7':
-            cert = pkcs12.get_certificate()
-            pkey = pkcs12.get_privatekey()
+            smime = M2Crypto.SMIME.SMIME()
+            smime.load_key_bio(
+                M2Crypto.SMIME.BIO.MemoryBuffer(self.chave),
+                M2Crypto.SMIME.BIO.MemoryBuffer(self.certificado.encode('utf-8'))
+            )
+            pk7 = smime.sign(
+                M2Crypto.SMIME.BIO.MemoryBuffer(texto.encode('utf-8')),
+                flags=M2Crypto.SMIME.PKCS7_BINARY,
+                algo=tipo_hash
+            )
+            pem = M2Crypto.SMIME.BIO.MemoryBuffer()
+            pk7.write(pem)
+            assinatura = pem.getvalue()
 
-            entrada = crypto._new_mem_buf(texto.encode('utf-8'))
-
-            PKCS7_TEXT            = 0x1
-            PKCS7_NOCERTS         = 0x2
-            PKCS7_NOSIGS          = 0x4
-            PKCS7_NOCHAIN         = 0x8
-            PKCS7_NOINTERN        = 0x10
-            PKCS7_NOVERIFY        = 0x20
-            PKCS7_DETACHED        = 0x40
-            PKCS7_BINARY          = 0x80
-            PKCS7_NOATTR          = 0x100
-            PKCS7_NOSMIMECAP      = 0x200
-            PKCS7_NOOLDMIMETYPE   = 0x400
-            PKCS7_CRLFEOL         = 0x800
-            PKCS7_STREAM          = 0x1000
-            PKCS7_NOCRL           = 0x2000
-            PKCS7_PARTIAL         = 0x4000
-            PKCS7_REUSE_DIGEST    = 0x8000
-            PKCS7_NO_DUAL_CONTENT = 0x10000
-
-            pkcs7 = crypto._lib.PKCS7_sign(cert._x509, pkey._pkey, crypto._ffi.NULL, entrada, 0)
-            saida = crypto._new_mem_buf()
-            crypto._lib.i2d_PKCS7_bio(saida, pkcs7)
-            assinatura = crypto._bio_to_string(saida)
-            #assinatura = assinatura.replace(b'text/plain', b'application/json')
-            import ipdb; ipdb.set_trace();
-
-        assinatura = base64.encodestring(assinatura)
         return assinatura.decode('utf-8')
 
     def verifica_assinatura_texto(self, texto, assinatura, tipo_hash='sha1'):

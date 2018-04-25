@@ -4,8 +4,8 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
-from . import (base, data, ibge, inscricao, ncm, telefone, valor, template,
-               febraban, certificado, codigo_barras, webservice)
+from . import (base, certificado, codigo_barras, data, febraban, feriado, ibge, inscricao, ncm, produto, telefone,
+               template, valor, webservice)
 from .python_pt_BR import python_pt_BR
 
 import sys

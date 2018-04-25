@@ -102,6 +102,7 @@ class Conexao(object):
         self.envio = ''
         self.resposta = ''
         self.response = None
+        self.retorno = None
 
     def conectar_servico(self, envio):
         self.envio = envio

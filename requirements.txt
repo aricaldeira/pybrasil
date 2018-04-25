@@ -1,6 +1,7 @@
 email-validator==1.0.3
 future==0.16.0
 lxml==4.2.1
+M2Crypto==0.29.0
 mako==1.0.7
 numpy==1.14.2
 py3o.template==0.9.12

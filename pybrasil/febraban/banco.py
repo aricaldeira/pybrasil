@@ -91,7 +91,7 @@ class Banco(object):
         if os.path.exists(self.arquivo_configuracao_json):
             self.configuracao_json = DicionarioObjeto(json.load(open(self.arquivo_configuracao_json)))
         else:
-            self.template_json = ''
+            self.configuracao_json = DicionarioObjeto()
 
         self.carteira = ''
         self.modalidade = ''

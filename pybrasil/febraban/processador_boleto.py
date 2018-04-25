@@ -49,9 +49,9 @@ if sys.version_info.major == 2:
 else:
     from http.client import HTTPSConnection, HTTPConnection
 
-import base64
+import json
 
-from ..base import DicionarioObjeto
+from ..base import DicionarioObjeto, gera_objeto_xml, tira_namespaces, unescape_xml, gera_objeto_xml
 from ..certificado import Certificado
 from ..webservice import Conexao
 
@@ -83,6 +83,27 @@ class ProcessadorBoleto(object):
 
         return conexao
 
+    def limpa_namespace(self, operacao, xml):
+        xml = tira_namespaces(xml)
+
+        if not (self.configuracao[operacao].assinatura and self.configuracao[operacao].assinatura.namespaces):
+            return xml
+
+        for namespace, url in self.configuracao[operacao].assinatura.namespaces.items():
+            xml = xml.replace(f'xmlns:{namespace}="{url}"', '')
+            xml = xml.replace(f'xmlns="{url}"', '')
+
+        return xml
+
+    def unescape_xml(self, xml):
+        xml = unescape_xml(xml)
+        xml = xml.replace('<?xml version="1.0" encoding="UTF-8"?>', '')
+        xml = xml.replace('<?xml version="1.0" encoding="utf-8"?>', '')
+        xml = xml.replace('<?xml version="1.0" encoding="UTF-8" ?>', '')
+        xml = xml.replace('<?xml version="1.0" encoding="utf-8" ?>', '')
+        return xml
+
+
     def assina_envio(self, envio):
         if not (self.configuracao.envio_boleto and self.configuracao.envio_boleto.assina):
             return envio
@@ -91,15 +112,74 @@ class ProcessadorBoleto(object):
 
         assinatura = self.certificado.assina_texto(envio, tipo_hash='sha256', formato='pkcs7')
 
-        return assinatura.replace('\n', '')
+        return assinatura
 
     def envia_boleto(self, boleto):
         self.configuracao_boleto(boleto)
-        conteudo = self.assina_envio(boleto.json)
-        conexao = self.prepara_conexao('envio_boleto')
-        #conteudo = base64.encodestring(conteudo.encode('utf-8')).decode('utf-8').replace('\n', '')
-        conexao.conectar_servico(conteudo)
 
-        import ipdb; ipdb.set_trace();
+        configuracao = DicionarioObjeto(self.configuracao.envio_boleto)
+
+        if configuracao.assina:
+            envio = self.assina_envio(boleto.json)
+
+        conexao = self.prepara_conexao('envio_boleto')
+        conexao.conectar_servico(envio)
+
+        if configuracao.resposta_xml:
+            xml = conexao.resposta
+
+            if configuracao.escapa_resposta:
+                xml = self.unescape_xml(xml)
+
+            xml = self.limpa_namespace('envio_boleto', xml)
+
+            resposta = gera_objeto_xml(xml)
+
+            if configuracao.tag_retorno:
+                tag_retorno = resposta.getroottree().findall('//' + configuracao.tag_retorno)
+            else:
+                tag_retorno = []
+
+            if configuracao.tag_erro:
+                tag_erro = resposta.getroottree().findall('//' + configuracao.tag_erro)
+            else:
+                tag_erro = []
+
+            if tag_retorno:
+                tag_retorno = tag_retorno[0]
+
+                if configuracao.retorno_json:
+                    conexao.retorno = DicionarioObjeto(json.loads(tag_retorno.text))
+                else:
+                    conexao.retorno = tag_retorno
+
+            if configuracao.retorno_json:
+                mensagem_erro = ''
+
+                if configuracao.tag_erro_codigo:
+                    texto_erro = getattr(conexao.retorno, configuracao.tag_erro_codigo, '')
+                    mensagem_erro += f'Código de retorno: {texto_erro}\n'
+
+                if configuracao.tag_erro_descricao:
+                    texto_erro = getattr(conexao.retorno, configuracao.tag_erro_descricao, '')
+                    mensagem_erro += f'Mensagem: {texto_erro}\n'
+
+                conexao.mensagem_erro = mensagem_erro
+
+            elif tag_erro:
+                mensagem_erro = ''
+
+                for erro in tag_erro:
+                    conexao.erros.append(erro)
+
+                    if configuracao.tag_erro_codigo:
+                        texto_erro = getattr(erro, configuracao.tag_erro_codigo, '')
+                        mensagem_erro += f'Código de retorno: {texto_erro}\n'
+
+                    if configuracao.tag_erro_descricao:
+                        texto_erro = getattr(erro, configuracao.tag_erro_descricao, '')
+                        mensagem_erro += f'Mensagem: {texto_erro}\n'
+
+                conexao.mensagem_erro = mensagem_erro
 
         return conexao
