@@ -50,6 +50,7 @@ else:
     from http.client import HTTPSConnection, HTTPConnection
 
 import json
+import html
 
 from ..base import DicionarioObjeto, gera_objeto_xml, tira_namespaces, unescape_xml, gera_objeto_xml
 from ..certificado import Certificado
@@ -103,12 +104,11 @@ class ProcessadorBoleto(object):
         xml = xml.replace('<?xml version="1.0" encoding="utf-8" ?>', '')
         return xml
 
-
     def assina_envio(self, envio):
         if not (self.configuracao.envio_boleto and self.configuracao.envio_boleto.assina):
             return envio
 
-        envio = 'Content-Type: application/json;\r\n\r\n' + envio
+        #envio = 'Content-Type: application/json;\r\n\r\n' + envio
 
         assinatura = self.certificado.assina_texto(envio, tipo_hash='sha256', formato='pkcs7')
 
@@ -119,8 +119,13 @@ class ProcessadorBoleto(object):
 
         configuracao = DicionarioObjeto(self.configuracao.envio_boleto)
 
+        envio = boleto.json
+
+        if configuracao.escapa_envio_json:
+            envio = html.escape(envio)
+
         if configuracao.assina:
-            envio = self.assina_envio(boleto.json)
+            envio = self.assina_envio(envio)
 
         conexao = self.prepara_conexao('envio_boleto')
         conexao.conectar_servico(envio)
@@ -149,20 +154,36 @@ class ProcessadorBoleto(object):
                 tag_retorno = tag_retorno[0]
 
                 if configuracao.retorno_json:
-                    conexao.retorno = DicionarioObjeto(json.loads(tag_retorno.text))
+                    retorno_json = tag_retorno.text
+
+                    if configuracao.escapa_retorno_json:
+                        retorno_json = html.unescape(retorno_json)
+
+                    conexao.retorno = DicionarioObjeto(json.loads(retorno_json))
                 else:
                     conexao.retorno = tag_retorno
 
             if configuracao.retorno_json:
                 mensagem_erro = ''
+                deu_certo = False
 
-                if configuracao.tag_erro_codigo:
-                    texto_erro = getattr(conexao.retorno, configuracao.tag_erro_codigo, '')
-                    mensagem_erro += f'Código de retorno: {texto_erro}\n'
+                #
+                # Trata o caso do Bradesco, que manda o código de retorno de sucesso no mesmo campo dos erros
+                #
+                if configuracao.tag_sucesso_codigo and configuracao.tag_sucesso_codigo == configuracao.tag_erro_codigo:
+                    texto_sucesso = getattr(conexao.retorno, configuracao.tag_sucesso_codigo, '')
 
-                if configuracao.tag_erro_descricao:
-                    texto_erro = getattr(conexao.retorno, configuracao.tag_erro_descricao, '')
-                    mensagem_erro += f'Mensagem: {texto_erro}\n'
+                    if texto_sucesso == configuracao.tag_sucesso_codigo_valor:
+                        deu_certo = True
+
+                if not deu_certo:
+                    if configuracao.tag_erro_codigo:
+                        texto_erro = getattr(conexao.retorno, configuracao.tag_erro_codigo, '')
+                        mensagem_erro += f'Código de retorno: {texto_erro}\n'
+
+                    if configuracao.tag_erro_descricao:
+                        texto_erro = getattr(conexao.retorno, configuracao.tag_erro_descricao, '')
+                        mensagem_erro += f'Mensagem: {texto_erro}\n'
 
                 conexao.mensagem_erro = mensagem_erro
 

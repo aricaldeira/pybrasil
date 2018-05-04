@@ -73,7 +73,7 @@ def calcula_digito_nosso_numero(self, boleto):
 
 
 def agencia_conta(self, boleto):
-    return '%s-%s/%s-%s' % (str(boleto.beneficiario.agencia.numero).zfill(4), boleto.beneficiario.agencia.digito, boleto.beneficiario.codigo.numero.zfill(7)[:7], boleto.beneficiario.codigo.digito)
+    return '%s-%s/%s-%s' % (str(boleto.beneficiario.agencia.numero).zfill(4), boleto.beneficiario.agencia.digito, boleto.beneficiario.conta.numero.zfill(7)[:7], boleto.beneficiario.conta.digito)
 
 
 def campo_livre(self, boleto):

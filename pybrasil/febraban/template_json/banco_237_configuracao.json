@@ -3,7 +3,8 @@
         "conexao": {
             "servidor": "cobranca.bradesconetempresa.b.br",
             "porta": 443,
-            "url": "ibpjregistrotitulows/registrotitulohomologacao",
+            "url": "ibpjregistrotitulows/registrotitulo",
+            "url_homologacao": "ibpjregistrotitulows/registrotitulohomologacao",
             "metodo": "",
             "header": {
                 "Content-Type": "application/json"
@@ -24,12 +25,18 @@
             }
          },
         "escapa_envio": false,
+        "escapa_envio_json": false,
         "escapa_resposta": false,
         "resposta_xml": true,
         "tag_retorno": "return",
         "retorno_json": "true",
+        "escapa_retorno_json": "true",
         "tag_erro": "",
         "tag_erro_codigo": "cdErro",
-        "tag_erro_descricao": "msgErro"
+        "tag_erro_descricao": "msgErro",
+        "tag_sucesso": "",
+        "tag_sucesso_codigo": "cdErro",
+        "tag_sucesso_codigo_valor": "0",
+        "tag_sucesso_descricao": "msgErro"
     }
 }

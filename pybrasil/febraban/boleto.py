@@ -448,7 +448,7 @@ class Boleto(object):
         }
         dados_json = aplica_template(self.banco.template_json, dados)
         dados_json = json.loads(dados_json)
-        return json.dumps(dados_json)
+        return json.dumps(dados_json, ensure_ascii=False).replace('ŭ', 'u').replace('Ŭ', 'U')
 
 
 def gera_pdf_boletos(lista_boletos, template_boleto=None):
