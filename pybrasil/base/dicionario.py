@@ -41,23 +41,41 @@
 from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
-
+import sys
 import collections
 
+if sys.version_info.major == 2:
+    class DicionarioObjeto(dict):
+        def __getattr__(self, chave):
+            if chave in self:
+                attr = self[chave]
 
-class DicionarioObjeto(collections.OrderedDict):
-    def __getattr__(self, chave):
-        if chave in self:
-            attr = self[chave]
+                if isinstance(attr, dict):
+                    d = DicionarioObjeto()
+                    d.update(attr)
+                    self[chave] = d
 
-            if isinstance(attr, dict) or isinstance(attr, collections.OrderedDict):
-                d = DicionarioObjeto()
-                d.update(attr)
-                self[chave] = d
+                return attr
 
-            return attr
+            return ''
 
-        return ''
+        def __setattr__(self, chave, valor):
+            self[chave] = valor
 
-    def __setattr__(self, chave, valor):
-        self[chave] = valor
+else:
+    class DicionarioObjeto(collections.OrderedDict):
+        def __getattr__(self, chave):
+            if chave in self:
+                attr = self[chave]
+
+                if isinstance(attr, dict) or isinstance(attr, collections.OrderedDict):
+                    d = DicionarioObjeto()
+                    d.update(attr)
+                    self[chave] = d
+
+                return attr
+
+            return ''
+
+        def __setattr__(self, chave, valor):
+            self[chave] = valor

@@ -42,6 +42,9 @@ from __future__ import (division, print_function, unicode_literals,
                         absolute_import)
 
 
+import sys
+
+
 from .codigo_barras import (valida_codigo_barras, identifica_codigo_barras,
     monta_linha_digitavel)
 from .linha_digitavel import (valida_linha_digitavel,
@@ -51,4 +54,6 @@ from .remessa_boleto import RemessaBoleto
 from .retorno_boleto import RetornoBoleto
 from .lista_banco import BANCO_CODIGO
 from .boleto import Boleto, gera_pdf_boletos
-from .processador_boleto import ProcessadorBoleto
+
+if sys.version_info.major != 2:
+    from .processador_boleto import ProcessadorBoleto
