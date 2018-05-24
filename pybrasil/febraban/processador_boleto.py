@@ -129,6 +129,8 @@ class ProcessadorBoleto(object):
 
         conexao = self.prepara_conexao('envio_boleto')
         conexao.conectar_servico(envio)
+        conexao.nosso_numero = ''
+        conexao.mensagem_erro = ''
 
         if configuracao.resposta_xml:
             xml = conexao.resposta
@@ -175,6 +177,10 @@ class ProcessadorBoleto(object):
 
                     if texto_sucesso == configuracao.tag_sucesso_codigo_valor:
                         deu_certo = True
+
+                        if configuracao.tag_sucesso_nosso_numero:
+                            if getattr(conexao.retorno, configuracao.tag_sucesso_nosso_numero, ''):
+                                conexao.nosso_numero = getattr(conexao.retorno, configuracao.tag_sucesso_nosso_numero)
 
                 if not deu_certo:
                     if configuracao.tag_erro_codigo:

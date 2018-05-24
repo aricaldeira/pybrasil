@@ -37,6 +37,7 @@
         "tag_sucesso": "",
         "tag_sucesso_codigo": "cdErro",
         "tag_sucesso_codigo_valor": "0",
-        "tag_sucesso_descricao": "msgErro"
+        "tag_sucesso_descricao": "msgErro",
+        "tag_sucesso_nosso_numero": "nuTituloGerado"
     }
 }

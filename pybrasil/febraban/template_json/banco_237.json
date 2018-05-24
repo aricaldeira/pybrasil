@@ -12,7 +12,7 @@
     "eNuSequenciaContrato": "0",
     "tpRegistro": "1",
     "cdProduto": "0",
-    "nuTitulo": "${ str(boleto.nosso_numero) }",
+    "nuTitulo": "${ str(boleto.nosso_numero or '0') }",
     "nuCliente": "${ str(documento.numero)[:10] }",
     "dtEmissaoTitulo": "${ formata_data(boleto.data_processamento, '%d.%m.%Y') }",
     "dtVencimentoTitulo": "${ formata_data(boleto.data_vencimento, '%d.%m.%Y') }",
