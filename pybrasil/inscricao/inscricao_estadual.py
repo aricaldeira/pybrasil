@@ -473,6 +473,7 @@ class ValidaIEDF(ValidaIE):
         ]
         self.posicoes = [range(11), range(12)]
         self.formato = [2, '-', 3, '.', 3, '/', 3, '-', 2]
+        self.tamanho_minimo = 13
 
 
 class ValidaIEES(ValidaIE):
