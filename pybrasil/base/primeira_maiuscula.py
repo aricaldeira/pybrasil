@@ -235,6 +235,12 @@ SINAIS = (
 # http://goncin.wordpress.com/2010/12/16/normalizando-nomes-proprios-com-php/
 #
 def primeira_maiuscula(texto, nome_proprio=True, acrescenta_ponto=False):
+    if not texto:
+        return texto
+
+    if len(texto) == 1:
+        return texto
+
     termina_com_ponto = texto.endswith('.')
     #
     # A primeira tarefa da normalização é lidar com partes do nome que
