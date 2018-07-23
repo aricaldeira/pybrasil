@@ -7,6 +7,7 @@ setup(
         'pybrasil.base',
         'pybrasil.certificado',
         'pybrasil.codigo_barras',
+        'pybrasil.codigo_barras.datamatrix',
         'pybrasil.data',
         'pybrasil.febraban',
         'pybrasil.feriado',
@@ -26,7 +27,7 @@ setup(
     author_email='ari.caldeira@tauga.com.br',
     description='',
     package_data = {
-        '': ['*.txt'],
+        '': ['*.txt', '*.odt'],
     },
     install_requires=[
         'email-validator',
