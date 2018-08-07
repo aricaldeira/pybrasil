@@ -466,6 +466,10 @@ class Certificado(object):
         elif tag:
             a_assinar = doc_xml.xpath("//" + tag, namespaces=namespaces)
             a_assinar = a_assinar[0]
+
+            if atributo:
+                URI = a_assinar.attrib[atributo]
+
             a_assinar = a_assinar.getparent()
 
         #assinaturas = a_assinar.xpath('//sig:Signature', namespaces=NAMESPACES)
