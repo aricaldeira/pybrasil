@@ -82,7 +82,7 @@ def carteira_nosso_numero(self, boleto):
 
 
 def agencia_conta(self, boleto):
-    return '%s-%s/%s' % (str(boleto.beneficiario.agencia.numero).zfill(4), boleto.beneficiario.agencia.digito, boleto.beneficiario.codigo.numero.zfill(7)[:7])
+    return '%s/%s' % (str(boleto.beneficiario.agencia.numero).zfill(4), boleto.beneficiario.codigo.numero.zfill(7)[:7])
 
 
 def header_remessa_400(self, remessa):
@@ -102,7 +102,7 @@ def header_remessa_400(self, remessa):
     texto += beneficiario.nome.ljust(30)[:30]
     texto += '033'
     texto += 'SANTANDER'.ljust(15)
-    texto += remessa.data_hora.strftime(b'%d%m%y')
+    texto += remessa.data_hora.strftime('%d%m%y')
     texto += ''.zfill(16)
     texto += ''.ljust(275)
     texto += str(remessa.sequencia).zfill(3)
@@ -176,7 +176,7 @@ def linha_remessa_400(self, remessa, boleto):
 
     texto += boleto.comando or '01'  # Registro do boleto no banco
 
-    texto += boleto.identificacao.ljust(10)[:10]
+    texto += boleto.documento.numero.ljust(10)[:10]
 
     texto += boleto.data_vencimento.strftime('%d%m%y')
     texto += str(int(boleto.documento.valor * 100)).zfill(13)
@@ -189,8 +189,10 @@ def linha_remessa_400(self, remessa, boleto):
 
     if boleto.dias_protesto:
         texto += '06'  # Segunda instrução de cobrança, protestar
-    else:
+    elif boleto.dias_baixa:
         texto += '03'  # Segunda instrução de cobrança, baixar após 30 dias do vencimento
+    else:
+        texto += '00'
 
     texto += str(int(boleto.valor_juros * 100)).zfill(13)
 
