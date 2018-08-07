@@ -175,9 +175,9 @@ def hora_decimal_to_horas_minutos_segundos(valor):
         return None
 
     valor = D(valor)
-    horas = D(int(valor))
-    minutos = D(int((valor * 60) - (horas * 60)))
-    segundos = D(int((valor * 60 * 60) - (horas * 60 * 60) - (minutos * 60)))
+    horas = D(valor).quantize(D('1'))
+    minutos = D(valor * 60).quantize(D('1')) - (horas * 60)
+    segundos = D(valor * 60 * 60).quantize(D('1')) - (horas * 60 * 60) - (minutos * 60)
 
     return horas, minutos, segundos
 
@@ -187,9 +187,9 @@ def horario_decimal_to_hora_decimal(valor):
         return None
 
     valor = D(valor)
-    horas = D(int(valor))
-    minutos = D(int((valor * 100) - (horas * 100)))
-    segundos = D(int((valor * 100 * 100) - (horas * 100 * 100) - (minutos * 100)))
+    horas = D(valor).quantize(D('1'))
+    minutos = D(valor * 100).quantize(D('1')) - (horas * 100)
+    segundos = D(valor * 100 * 100).quantize(D('1')) - (horas * 100 * 100) - (minutos * 100)
 
     valor = (horas * 60) + minutos + (segundos / 60)
     valor /= 60
