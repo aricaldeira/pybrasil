@@ -52,12 +52,13 @@ CURDIR = os.path.dirname(os.path.abspath(__file__))
 @python_2_unicode_compatible
 class Estado(object):
     def __init__(self, sigla='', nome='', codigo_ibge='', fuso_horario='America/Sao_Paulo',
-                 codigo_geoip=''):
+                 codigo_geoip='', artigo=''):
         self.sigla = sigla
         self.nome = nome
         self.codigo_ibge = codigo_ibge
         self.fuso_horario = fuso_horario
         self.codigo_geoip = codigo_geoip
+        self.artigo = artigo
 
     def __str__(self):
         return self.nome + ' - ' + self.sigla
@@ -83,7 +84,8 @@ def _monta_dicionario_ibge():
     for linha in arquivo:
         linha = linha.replace('\n', '').replace('\r', '')
         campos = linha.split('|')
-        e = Estado(sigla=campos[0], nome=campos[1], codigo_ibge=campos[2], fuso_horario=campos[3], codigo_geoip=campos[4])
+        e = Estado(sigla=campos[0], nome=campos[1], codigo_ibge=campos[2], fuso_horario=campos[3], codigo_geoip=campos[4],
+                   artigo=campos[5])
 
         dicionario[e.codigo_ibge] = e
 
