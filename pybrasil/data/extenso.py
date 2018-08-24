@@ -331,6 +331,14 @@ def formata_data(data=hoje(), formato='%d/%m/%Y'):
         return ''
 
     if sys.version_info.major == 2:
-        return data.strftime(formato.encode('utf-8')).decode('utf-8')
+        texto = data.strftime(formato.encode('utf-8')).decode('utf-8')
     else:
-        return data.strftime(formato)
+        texto = data.strftime(formato)
+
+    if '%º' in texto:
+        if data.day == 1:
+            texto = texto.replace('%º', 'º')
+        else:
+            texto = texto.replace('%º', '')
+
+    return texto
